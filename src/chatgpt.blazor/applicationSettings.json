@@ -1,0 +1,5 @@
+{
+  "AppSettings:AppVersion": "v1",
+  "AppSettings:AppTitle": "Lyle's Blazin' ChatGPT Example",
+  "AppSettings:AppDescription": "An ASP.NET Blazor Web App for talking to Chat-GPT"
+}

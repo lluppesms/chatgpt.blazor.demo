@@ -1,0 +1,81 @@
+# ----------------------------------------------------------------------------------------------------
+# Template to deploy a pre-built Azure Website artifact to one environment
+# ----------------------------------------------------------------------------------------------------
+parameters: 
+- name: variableGroupName
+  default:  'myVariableGroup'
+- name: environmentName
+  default:  'DEV'
+- name: appFolderName
+  default: ''
+- name: appProjectName
+  default: ''
+
+# ------------------------------------------------------------------------------------------------------------------------
+jobs:
+- deployment: Deploy${{ parameters.environmentName }}Website
+  displayName: Initialize ${{ parameters.environmentName }} Deploy Website
+  environment: ${{ parameters.environmentName }}
+
+- job: DeployApplication${{ parameters.environmentName }}Website
+  displayName: Deploy ${{ parameters.environmentName }} Website
+  variables:
+    - group: ${{ parameters.variableGroupName }}
+    - name: environmentNameUpper
+      value: ${{ upper(parameters.environmentName) }}
+    - name: environmentNameLower
+      value: ${{ lower(parameters.environmentName) }}
+    - name: appProjectName
+      value: '${{ parameters.appProjectName }}'
+    - name: solution
+      value: '${{ parameters.appFolderName }}/*.sln'
+    - name: buildPlatform
+      value: 'Any CPU'
+    - name: buildConfiguration
+      value: 'Release'
+    - name: appVersion
+      value: $(Build.BuildNumber)
+
+  steps:
+  - bash: |
+      fullAppName=$(echo "$(orgName)-$(appName)-$(environmentNameLower)" | tr '[:upper:]' '[:lower:]')
+      echo "##vso[task.setvariable variable=fullAppName]$fullAppName"
+    displayName: 'Create Variables'
+
+  - task: DownloadPipelineArtifact@2
+    displayName: 'Download Pipeline Artifacts'
+    inputs:
+      artifact: websitedrop
+      
+  - task: CmdLine@2
+    inputs:
+      script: |
+        echo "serviceConnectionName=$(serviceConnectionName)"
+        echo "environmentNameUpper=$(environmentNameUpper)"
+        echo "environmentNameLower=$(environmentNameLower)"
+        echo "appName=$(appName)"
+        echo "fullAppName=$(fullAppName)"
+        echo "appProjectName=$(appProjectName)"
+        echo "solution=$(solution)"
+        echo "buildPlatform=$(buildPlatform)"
+        echo "buildConfiguration=$(buildConfiguration)"
+        echo "appVersion=$(appVersion)"
+        echo "Directory of pipeline workspace:"
+        tree $(Pipeline.Workspace)
+        echo "Directory of DefaultWorkingDirectory:"
+        tree $(System.DefaultWorkingDirectory)
+        echo "Directory of ArtifactStagingDirectory:"
+        tree $(Build.ArtifactStagingDirectory)
+    displayName: 'Display Variables and Tree'
+    continueOnError: true
+
+  - task: AzureRmWebAppDeployment@4
+    displayName: 'Publish App to Azure'
+    inputs:
+      ConnectionType: AzureRM
+      azureSubscription: '$(serviceConnectionName)'
+      appType: webAppLinux
+      WebAppName: $(fullAppName)
+      Package: "$(Build.ArtifactStagingDirectory)/../$(appProjectName).zip"
+      enableCustomDeployment: true
+      deploymentMethod: zipDeployment

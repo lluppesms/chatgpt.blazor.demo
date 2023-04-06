@@ -1,0 +1,87 @@
+# ------------------------------------------------------------------------------------------------------------------------
+# GHA Reusable Called Workflow to deploy Azure Resources Only
+# ------------------------------------------------------------------------------------------------------------------------
+# You need to set up secrets in the GitHub Secrets Repository before running these workflows.
+#   See Docs\CreateGitHubSecrets\.md for details
+# ------------------------------------------------------------------------------------------------------------------------
+name: template.deploy.infra
+run-name: Deploy Infra
+on:
+  workflow_call:
+    inputs:
+      envCode:
+        required: true
+        type: string
+
+# ------------------------------------------------------------------------------------------------------------------------
+jobs:
+  deploy:
+    name: Create Infra
+    runs-on: windows-latest
+    environment:
+      name: ${{ inputs.envCode }}
+    
+    env:
+      generatedAppEnvName: ${{ vars.APP_NAME }}-${{ inputs.envCode }}
+      generatedResourceGroupName: ${{ vars.RESOURCE_GROUP_PREFIX }}_${{ inputs.envCode }}
+
+    steps:
+    - name: Display Variables
+      run: |-
+        echo "generatedAppEnvName=${{ env.generatedAppEnvName }}"
+        echo "generatedResourceGroupName=${{ env.generatedResourceGroupName }}"
+        echo "environmentCode=${{ inputs.envCode }}"
+        echo "location=${{ vars.LOCATION }}"
+        echo "orgName=${{ vars.ORG_NAME }}"
+        echo "appName=${{ vars.APP_NAME }}"
+        echo "webSiteSku=${{ vars.WEBSITE_SKU }}"
+        echo "subscriptionId=${{ vars.AZURE_SUBSCRIPTION_ID }}"
+        echo "keyVaultOwnerUserId=${{ vars.KEYVAULT_OWNER_USERID }}"
+        echo "openAIResourceName=${{ vars.OPENAI_RESOURCE_NAME }}"
+        echo "adDomain=${{ vars.AZURE_AD_DOMAIN }}"
+        echo "adTenantId=${{ vars.AZURE_AD_TENANTID }}"
+        echo "adClientId=${{ vars.AZURE_AD_CLIENTID }}"
+        echo "openAIApiKey=${{ secrets.OPENAI_API_KEY }}"
+        echo "Resource Group Command:"
+        echo "  az group create --name ${{ env.generatedResourceGroupName }} --location ${{ vars.LOCATION }} --tags Organization=${{ inputs.orgName }} Application=${{ inputs.appName }} Environment=${{ inputs.envCode }}"
+        echo "Bicep Deploy Sample Command:"
+        echo "  az deployment group create -n main --resource-group ${{ env.generatedResourceGroupName }} --template-file 'infra/Bicep/main.bicep' --parameters environmentCode=${{ inputs.envCode }} location=${{ vars.LOCATION }} orgName=${{ inputs.orgName }} appName=${{ inputs.appName }} webSiteSku=${{ inputs.webSiteSku }} keyVaultOwnerUserId=${{ vars.KEYVAULT_OWNER_USERID }} openAIApiKey=${{ secrets.openAIApiKey }} openAIResourceName=${{ vars.openAIResourceName }} adDomain=${{ vars.adDomain }} adTenantId=${{ vars.adTenantId }} adClientId=${{ vars.adClientId }}"
+        echo "Pipeline Workspace Directory Contents:"
+        tree ${{ env.GITHUB_ACTION_PATH }}
+      continue-on-error: true
+
+    - name: Checkout Code
+      uses: actions/checkout@main
+
+    - name: List Files
+      run: 
+        tree ${{ env.GITHUB_ACTION_PATH }}
+      continue-on-error: true
+
+    - name: Log into Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Create Resource Group
+      run: 
+        az group create --name ${{ env.generatedResourceGroupName }} --location ${{ vars.LOCATION }} --tags Environment=${{ inputs.envCode }} Application=${{ vars.APP_NAME }}
+
+    - name: Deploy Azure Resources
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        resourceGroupName: ${{ env.generatedResourceGroupName }}
+        template: infra/Bicep/main.bicep
+        parameters: >
+          environmentCode=${{ inputs.envCode }}
+          location=${{ vars.LOCATION }}
+          orgName=${{ vars.ORG_NAME }}
+          appName=${{ vars.APP_NAME }}
+          webSiteSku=${{ vars.WEBSITE_SKU }}
+          keyVaultOwnerUserId=${{ vars.KEYVAULT_OWNER_USERID }}
+          openAIResourceName=${{ vars.OPENAI_RESOURCE_NAME }}
+          adDomain=${{ vars.AZURE_AD_DOMAIN }}
+          adTenantId=${{ vars.AZURE_AD_TENANTID }}
+          adClientId=${{ vars.AZURE_AD_CLIENTID }}
+          openAIApiKey=${{ secrets.OPENAI_API_KEY }}

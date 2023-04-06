@@ -1,0 +1,18 @@
+# ----------------------------------------------------------------------------------------------------
+# Pipeline used by the azd command
+# ----------------------------------------------------------------------------------------------------
+name: chatgpt.blazor.demo
+
+infra:
+    provider: bicep
+    path: infra
+    module: main
+
+pipeline:
+    provider: github
+
+services:
+  web:
+    project: ./src/chatgpt.blazor/
+    language: csharp
+    host: appservice

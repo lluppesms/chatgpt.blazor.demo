@@ -1,0 +1,43 @@
+# ------------------------------------------------------------------------------------------------------------------------
+# Pipeline to build and deploy Website Only
+# See readme file for info about variable group "ChatGPT"
+# ------------------------------------------------------------------------------------------------------------------------
+name: $(date:yyyy).$(date:MM).$(date:dd)$(rev:.r)
+
+pool:
+  vmImage: windows-latest
+
+# ----------------------------------------------------------------------------------------------------
+trigger:
+  # since this repo has both AzDO and GHA pipelines, nothing is run automatically...
+  - none
+  # batch: true
+  # branches:
+  #   include:
+  #     - main
+  # paths:
+  #   include:
+  #     - 'src/*'
+  #   exclude: 
+  #     - '**/*.yml'
+  #     - '**/*.yaml'
+  #     - '**/*.bicep'
+  #     - '**/*.md'
+
+# ----------------------------------------------------------------------------------------------------
+# parameters:
+#   - name: deployQA
+#     displayName: Deploy to QA
+#     type: boolean
+#     default: false
+
+# ----------------------------------------------------------------------------------------------------
+# This approach to optionally deploy QA works but it's not DRY
+# ----------------------------------------------------------------------------------------------------
+stages:
+- template: pipes/website-only-pipe.yml
+  parameters:
+    variableGroupName: 'ChatGPT'
+    environments: ['DEMO']
+    appFolderName: 'src/chatgpt.blazor'
+    appProjectName: 'chatgpt.blazor'

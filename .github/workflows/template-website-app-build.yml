@@ -1,0 +1,69 @@
+# ------------------------------------------------------------------------------------------------------------------------
+# GHA Reusable Called Workflow to build a Website App
+# ------------------------------------------------------------------------------------------------------------------------
+# You need to set up secrets in the GitHub Secrets Repository before running these workflows.
+#   See readme.md for details
+# ------------------------------------------------------------------------------------------------------------------------
+name: template.website.build
+run-name: Build Website App
+on:
+  workflow_call:
+    inputs:
+      envCode:
+        required: true
+        type: string
+      rootDirectory:
+        required: true
+        type: string
+
+# ------------------------------------------------------------------------------------------------------------------------
+jobs:
+  build:
+    name: Build
+    runs-on: windows-latest
+    environment:
+      name: ${{ inputs.envCode }}
+
+    env:
+      CONFIGURATION: Release
+      DOTNET_CORE_VERSION: 7.0.x
+      artifactName: websiteapp
+      AZURE_WEBAPP_PACKAGE_PATH: ./output
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
+
+    - name: Restore Dependencies
+      run: dotnet restore "${{ inputs.rootDirectory }}"
+
+    - name: Build
+      run: dotnet build "${{ inputs.rootDirectory }}" --configuration Release --no-restore
+    # - name: Build Application
+    #   shell: bash
+    #   run: |
+    #     pushd './${{ inputs.rootDirectory }}'
+    #     dotnet build --configuration Release --output ./output
+    #     popd
+
+    # - name: List Files After Build
+    #   run: 
+    #     tree ${{ env.GITHUB_ACTION_PATH }}
+    #   continue-on-error: true
+
+    #- name: Test Application
+    #  run: dotnet test "${{ inputs.rootDirectory }}" --no-build
+
+    - name: Publish
+      run: dotnet publish "${{ inputs.rootDirectory }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
+
+    - name: Save Publish Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ env.artifactName }}
+        path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}

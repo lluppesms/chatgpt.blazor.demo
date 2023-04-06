@@ -1,0 +1,4 @@
+*.json
+!resourceAbbreviations.json
+!vnet.nsgCommonRules*.json
+!vnet.nsgCustomRules*.json

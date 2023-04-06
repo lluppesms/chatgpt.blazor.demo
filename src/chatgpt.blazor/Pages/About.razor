@@ -1,0 +1,55 @@
+﻿@page "/about"
+@inject AppSettings settings
+@inject HttpContextAccessor context
+
+<PageTitle>About</PageTitle>
+
+<Blazorise.Div Style="padding: 25px;">
+    <h1>About</h1>
+    <h2>What can Chat GPT do?</h2>
+    <p style="margin-left: 30px;">This is a simple Blazor web app that is an example of how you can interact with ChatGPT</p>
+    <p style="font-size: 0.7em;">@buildInfo @oaikey</p>
+</Blazorise.Div>
+
+@code {
+    private string buildInfo = "Build: UNKNOWN";
+    private string oaikey = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // --> this always seems to fire twice for Server apps, so move logic to OnAfterRender
+        await base.OnInitializedAsync().ConfigureAwait(true);
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (firstRender)
+        {
+            var userName = context.HttpContext.User.Identity?.Name;
+            if (userName.StartsWith("lyle", StringComparison.InvariantCultureIgnoreCase))
+            {
+                try
+                {
+                    var buildInfoFile = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "buildinfo.json");
+                    if (System.IO.File.Exists(buildInfoFile))
+                    {
+                        using (var r = new StreamReader(buildInfoFile))
+                        {
+                            var buildInfoData = r.ReadToEnd();
+                            var buildInfoObject = JsonConvert.DeserializeObject<BuildInfo>(buildInfoData);
+                            buildInfo = $"Build: {buildInfoObject.BuildNumber}";
+                        }
+                    }
+                    oaikey = string.IsNullOrEmpty(settings.OpenAIApiKey) ? string.Empty : " " + settings.OpenAIApiKey.Substring(0, 4);
+                }
+                catch (Exception)
+                {
+                    buildInfo = "Build: Error reading buildinfo!";
+                    oaikey = string.Empty;
+                }
+            }
+            StateHasChanged();
+        }
+    }
+}

@@ -1,0 +1,41 @@
+# ------------------------------------------------------------------------------------------------------------------------
+# Pipeline to deploy Azure Resources Only
+# See readme file for info about variable group "ChatGPT"
+# ------------------------------------------------------------------------------------------------------------------------
+name: $(date:yyyy).$(date:MM).$(date:dd)$(rev:.r)
+pool:
+  vmImage: windows-latest
+
+# ------------------------------------------------------------------------------------------------------------------------
+trigger:
+  # since this repo has both AzDO and GHA pipelines, nothing is run automatically...
+  - none
+  # batch: true
+  # branches:
+  #   include:
+  #     - main
+  # paths:
+  #   include: 
+  #     - '**/*.yml'
+  #     - '**/*.yaml'
+  #     - '**/*.bicep'
+
+# ----------------------------------------------------------------------------------------------------
+parameters:
+  - name: runDevSecOpsScan
+    displayName: Run MS DevSecOps Scan
+    type: boolean
+    default: false
+  - name: runPsRuleScan
+    displayName: Run PSRule Bicep Scan
+    type: boolean
+    default: false
+
+# ----------------------------------------------------------------------------------------------------
+stages:
+- template: pipes/infra-only-pipe.yml
+  parameters:
+    variableGroupName: 'ChatGPT'
+    environments: ['DEMO']
+    runDevSecOpsScan: ${{ parameters.runDevSecOpsScan }}
+    runPsRuleScan: ${{ parameters.runPsRuleScan }}

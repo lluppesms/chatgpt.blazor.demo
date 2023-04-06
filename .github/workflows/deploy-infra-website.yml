@@ -1,0 +1,53 @@
+# ------------------------------------------------------------------------------------------------------------------------
+# GHA Workflow to deploy Azure Resources and Website App
+# ------------------------------------------------------------------------------------------------------------------------
+# You need to set up secrets in the GitHub Secrets Repository before running these workflows.
+#   See readme.md for details
+# ------------------------------------------------------------------------------------------------------------------------
+name: deploy.infra.and.website
+on: 
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'     
+        required: true
+        default: 'warning' 
+        type: choice
+        options:
+          - info
+          - warning
+          - debug 
+
+jobs:
+# ------------------------------------------------------------------------------------------------------------------------
+  # scan-code:
+  #   name: Scan Source Code
+  #   uses: ./.github/workflows/template-scan-code.yml
+
+# ------------------------------------------------------------------------------------------------------------------------
+  build-app:
+    name: Build Website App
+    uses: ./.github/workflows/template-website-app-build.yml
+    secrets: inherit
+    with:
+      envCode: 'dev'
+      rootDirectory: 'src/chatgpt.blazor'
+
+# ------------------------------------------------------------------------------------------------------------------------
+  infra-dev:
+    name: Create DEV Infra
+    needs: build-app
+    uses: ./.github/workflows/template-create-infra.yml
+    secrets: inherit
+    with:
+      envCode: 'dev'
+
+# ------------------------------------------------------------------------------------------------------------------------
+  deploy-dev:
+    name: Deploy Website App
+    needs: infra-dev
+    uses: ./.github/workflows/template-website-app-deploy.yml
+    secrets: inherit
+    with:
+      envCode: 'dev'
+
