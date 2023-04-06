@@ -22,7 +22,7 @@ These Azure DevOps YML files were designed to run as multi-stage environment dep
 
 - [Create Azure DevOps Environments](https://docs.luppes.com/CreateDevOpsEnvironments/)
 
-- Create Azure DevOps Variable Groups - see [Azure Devops Setup](../.azdo/readme.md)
+- Create Azure DevOps Variable Groups - see [Azure Devops Setup](../.azdo/pipelines/readme.md)
 
 - [Create Azure DevOps Pipeline(s)](https://docs.luppes.com/CreateNewPipeline/)
 
@@ -32,4 +32,4 @@ These Azure DevOps YML files were designed to run as multi-stage environment dep
 
 ## 4. Creating the variable group "ChatGPT"
 
-See the [Azure Devops Setup](../.azdo/readme.md) for more information
+See the [Azure Devops Setup](../.azdo/pipelines/readme.md) for more information

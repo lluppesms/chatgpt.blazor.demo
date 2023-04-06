@@ -18,4 +18,4 @@ This is a simple Blazor Application that create a chatbot window and interacts w
 
 2. [Deploy using Azure DevOps](/Docs/AzureDevOps.md)
 
-3. [Deploy using GitHub Actions](./.github/workflows//readme.md)
+3. [Deploy using GitHub Actions](./.github/workflows/readme.md)
