@@ -1,6 +1,6 @@
-# Deployment Template Notes
+# Azure DevOps Deployment Template Notes
 
-## 1. Template Definitions
+## 1. Azure DevOps Template Definitions
 
 Typically, you would want to set up either Option (a), or Option (b) AND Option (c), but not all three jobs.
 
@@ -16,9 +16,23 @@ These YML files were designed to run as multi-stage environment deploys (i.e. DE
 
 ---
 
-## 3. These pipelines needs a variable group named "ChatGPT"
+## 3. Setup Steps
 
-To create these variable groups, customize and run this command in the Azure Cloud Shell, once for each environment:
+- [Create Azure DevOps Service Connections](https://docs.luppes.com/CreateServiceConnections/)
+
+- [Create Azure DevOps Environments](https://docs.luppes.com/CreateDevOpsEnvironments/)
+
+- Create Azure DevOps Variable Groups -- see next step
+
+- [Create Azure DevOps Pipeline(s)](https://docs.luppes.com/CreateNewPipeline/)
+
+- Run the infra-and-website-pipeline.yml pipeline to deploy the project to an Azure subscription.
+
+---
+
+## 4. These pipelines needs a variable group named "ChatGPT"
+
+To create this variable group, customize and run this command in the Azure Cloud Shell:
 
 ``` bash
 az login
@@ -27,12 +41,12 @@ az pipelines variable-group create
   --project='<yourAzDOProject>'
   --name ChatGPT 
   --variables 
-      keyVaultOwnerUserId='<owner1SID>'
       location='eastus'
       resourceGroupPrefix='rg_blazingchat'
       serviceConnectionName='<yourServiceConnection>'
       subscriptionId='<yourSubscriptionId>'
       subscriptionName='<yourAzureSubscriptionName>'
+      keyVaultOwnerUserId='<owner1SID>'
       adDomain='yourDomain.onmicrosoft.com'
       adTenantId='yourTenantId'
       adClientId='yourClientId'
@@ -45,4 +59,4 @@ az pipelines variable-group create
       openAIImageGenerateUrl='https://api.openai.com/v1/images/generations'
       openAIImageEditUrl='https://api.openai.com/v1/images/edits'
       openAIImageSize='512x512'
- ```
+```

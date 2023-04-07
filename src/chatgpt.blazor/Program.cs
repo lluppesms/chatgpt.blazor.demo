@@ -37,20 +37,22 @@ builder.Services.AddSingleton<AppSettings>(settings);
 
 builder.Services.AddSingleton<IImageService>(new ImageService(settings));
 builder.Services.AddSingleton<IChatService>(new ChatService(settings));
-// builder.Services.AddSingleton<AppDataService>(new AppDataService());
 
-// ----- Configure Authentication ---------------------------------------------------------------------
-// I'm reading these keys out of the AppSettings so it's easier to deploy and set with DevOps
-builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-  .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAD"));
-builder.Services.AddControllersWithViews()
-  .AddMicrosoftIdentityUI();
-
-// ----- Configure Authorization ----------------------------------------------------------------------
-builder.Services.AddAuthorization(options =>
+var authSettings = builder.Configuration.GetSection("AzureAD");
+var enableAuth = !string.IsNullOrEmpty(authSettings["TenantId"]);
+if (enableAuth)
 {
-    options.FallbackPolicy = options.DefaultPolicy;
-});
+    // ----- Configure Authentication ---------------------------------------------------------------------
+    builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+      .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAD"));
+    builder.Services.AddControllersWithViews()
+      .AddMicrosoftIdentityUI();
+    // ----- Configure Authorization ----------------------------------------------------------------------
+    builder.Services.AddAuthorization(options =>
+    {
+        options.FallbackPolicy = options.DefaultPolicy;
+    });
+}
 
 // ----- Configure Context Accessor -------------------------------------------------------------------
 builder.Services.AddHttpContextAccessor();
@@ -64,17 +66,16 @@ builder.Services.AddToaster(config =>
     config.NewestOnTop = false;
 });
 builder.Services
-      .AddBlazorise(options =>
-      {
-          // options.ChangeTextOnKeyPress = true;
-      })
-      .AddBootstrap5Providers()
-      .AddFontAwesomeIcons();
+    .AddBlazorise(options =>
+    {
+        // options.ChangeTextOnKeyPress = true;
+    })
+    .AddBootstrap5Providers()
+    .AddFontAwesomeIcons();
 builder.Services.AddSweetAlert2(options =>
 {
     options.Theme = SweetAlertTheme.Default;
 });
-
 builder.Services.AddBlazoredLocalStorage();
 
 // ----------------------------------------------------------------------------------------------------
@@ -162,8 +163,12 @@ app.UseHttpsRedirection();
 
 // routing matches HTTP request and dispatches them to proper endpoings
 app.UseRouting();
-app.UseAuthentication();
-app.UseAuthorization();
+
+if (enableAuth)
+{
+    app.UseAuthentication();
+    app.UseAuthorization();
+}
 
 app.MapControllers();
 app.MapBlazorHub();

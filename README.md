@@ -14,8 +14,8 @@ This is a simple Blazor Application that create a chatbot window and interacts w
 
 ## Deployment Options
 
-1. [Deploy using AZD Command Line Tool](/Docs/AzdDeploy.md)
+1. [Deploy using AZD Command Line Tool](/.azure/readme.md)
 
-2. [Deploy using Azure DevOps](/Docs/AzureDevOps.md)
+2. [Deploy using Azure DevOps](/.azdo/pipelines/readme.md)
 
 3. [Deploy using GitHub Actions](./.github/workflows/readme.md)

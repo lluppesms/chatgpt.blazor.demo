@@ -22,9 +22,9 @@ This application requires a few secrets to be configured in the application whic
 }
 ```
 
-The OpenAI keys come from the resource that you created in the Azure portal for accessing the OpenAI API.
+The OpenAI keys are required come from the resource that you created in the Azure portal for accessing the OpenAI API.
 
-The TenantId and ClientId are the values from an Azure Active Directory App Registration that is used to authorized this application.  Go to the App Registration -> Authentication Page, and enter a new Redirect URI for this application.  The Redirect URI should be something like `https://xxx-chatgpt.azurewebsites.net/signin-oidc`.
+The Domain, TenantId and ClientId are optional and only expected if you want to enable authentication.  The values come from an Azure Active Directory App Registration that is used to authorized this application.  Go to the App Registration -> Authentication Page, and enter a new Redirect URI for this application.  The Redirect URI should be something like `https://xxx-chatgpt.azurewebsites.net/signin-oidc` and `https://localhost:7078/signin-oidc`.
 
 ---
 
@@ -32,17 +32,11 @@ The TenantId and ClientId are the values from an Azure Active Directory App Regi
 
 When an AZD command is run for the first time, a prompt will ask for the "Environment Name", the Azure Subscription to use and the Azure Region to deploy to.
 
-*NOTE: this Environment Name is not an environment code like [dev/qa/prod]!*
+*NOTE: this Environment Name is NOT an environment code like [dev/qa/prod]!*
 
 Choose the "Environment Name" carefully, as it will be used as the basis to name all of the resources, so it must be unique. Use a naming convention like *[yourInitials]-[appName]* or *[yourOrganization]-[appName]* as the format for Environment Name. The resulting web application name `MUST` be globally unique.
 
-For example, if Environment Name is equal to:
-
-``` bash
-xxx-chatgpt
-```
-
-AZD will create a Azure resources with these names:
+For example, if Environment Name is equal to: 'xxx-chatgpt', AZD will create a Azure resources with these names:
 
 | Azure Resource | Name                       | Uniqueness        |
 | -------------- | -------------------------- | ----------------- |
@@ -70,7 +64,7 @@ Typically a developer with either do the up command to do everything at once, or
 
 There is a Azure Developer CLI [extension](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.azure-dev) available in Visual Studio Code. If that is installed, it is easy to pop up the command window like this:
 
-![VSC Commands](images/AZD_Commands.png)
+![VSC Commands](../Docs/images/AZD_Commands.png)
 
 ---
 
@@ -84,11 +78,11 @@ These commands can also be run on the command line, like this:
 
 ## Example Command Execution
 
-![VSC Commands](images/AZD_Prompts.png)
+![VSC Commands](../Docs/images/AZD_Prompts.png)
 
 ### Resources Created
 
-![VSC Commands](images/AZD_Result.png)
+![VSC Commands](../Docs/images/AZD_Result.png)
 
 ---
 

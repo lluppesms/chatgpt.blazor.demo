@@ -360,8 +360,6 @@ MigrationBackup/
 .ionide/
 
 /src/.config/dotnet-tools.json
-.azure/
 infra/azdKeys.json
 .vscode/launch.json
 .vscode/tasks.json
-
