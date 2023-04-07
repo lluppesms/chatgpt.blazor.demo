@@ -11,9 +11,8 @@ public partial class Index : ComponentBase
     [Inject] SweetAlertService Sweet { get; set; }
     [Inject] AppSettings settings { get; set; }
     [Inject] ILocalStorageService LocalStorageSvc { get; set; }
-    [Inject] IToaster Toaster { get; set; }
+    //[Inject] IToaster Toaster { get; set; }
 
-    //private AppDataService AppData = new();
     private SessionStorageService SessionStorage = null;
     private SessionState AppData = new();
 
