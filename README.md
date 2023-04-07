@@ -6,7 +6,7 @@ This is a simple Blazor Application that create a chatbot window and interacts w
 
 [1]: https://vscode.dev/github/lluppesms/chatgpt.blazor.demo/
 
-![azd Compatible](/Docs/images/AZD_Compatible.png)
+[![azd Compatible](/Docs/images/AZD_Compatible.png)](/.azure/readme.md)
 
 [![deploy.infra.and.website](https://github.com/lluppesms/chatgpt.blazor.demo/actions/workflows/deploy-infra-website.yml/badge.svg)](https://github.com/lluppesms/chatgpt.blazor.demo/actions/workflows/deploy-infra-website.yml)
 

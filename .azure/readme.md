@@ -2,9 +2,7 @@
 
 The Azure Developer CLI (azd) is an open-source tool that accelerates the time it takes to get started on Azure. azd provides a set of developer-friendly commands that map to key stages in a workflow (code, build, deploy, monitor).
 
-This project has been configured to work with AZD commands to make it fast and easy to deploy a demo. 
-
-*(To learn how to make a project compatible with azd, see [Making Your Project 'azd' Compatible](https://docs.luppes.com/AzdCompatibility/))*
+This project has been configured to work with AZD commands to make it fast and easy to deploy a demo.
 
 ---
 
