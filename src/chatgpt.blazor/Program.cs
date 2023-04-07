@@ -1,9 +1,9 @@
+
 var builder = WebApplication.CreateBuilder(args);
 
 // ----------------------------------------------------------------------------------------------------
 // Add services to the container.
 // ----------------------------------------------------------------------------------------------------
-
 // ----- Get Application Settings into objects
 var jsonSettingsFile = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "applicationSettings.json");
 builder.Configuration
@@ -13,6 +13,11 @@ builder.Configuration
 var appSettings = builder.Configuration.GetSection("AppSettings");
 builder.Services.Configure<AppSettings>(appSettings);
 var settings = builder.Configuration.GetSection(nameof(AppSettings)).Get<AppSettings>();
+
+//// TODO: change the aapplication logger to use a custom logger and/or Serilog...
+//// https://docs.microsoft.com/en-us/aspnet/core/blazor/fundamentals/logging?view=aspnetcore-6.0
+builder.Logging.SetMinimumLevel(LogLevel.Warning);
+MyLogger.InitializeLogger(settings);
 
 builder.Services.AddSingleton(builder.Configuration);
 builder.Services.AddSingleton<AppSettings>(settings);
@@ -32,7 +37,7 @@ builder.Services.AddSingleton<AppSettings>(settings);
 
 builder.Services.AddSingleton<IImageService>(new ImageService(settings));
 builder.Services.AddSingleton<IChatService>(new ChatService(settings));
-builder.Services.AddSingleton<AppDataService>(new AppDataService());
+// builder.Services.AddSingleton<AppDataService>(new AppDataService());
 
 // ----- Configure Authentication ---------------------------------------------------------------------
 // I'm reading these keys out of the AppSettings so it's easier to deploy and set with DevOps
@@ -65,11 +70,12 @@ builder.Services
       })
       .AddBootstrap5Providers()
       .AddFontAwesomeIcons();
-//builder.Services.AddSweetAlert2(options =>
-//{
-//    options.Theme = SweetAlertTheme.Default;
-//});
+builder.Services.AddSweetAlert2(options =>
+{
+    options.Theme = SweetAlertTheme.Default;
+});
 
+builder.Services.AddBlazoredLocalStorage();
 
 // ----------------------------------------------------------------------------------------------------
 // Configure application
@@ -131,8 +137,6 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
-
 //if (settings.EnableSwagger)
 //{
 //    // Enable middleware to serve the generated OpenAPI definition as JSON files.
@@ -141,8 +145,20 @@ app.UseHttpsRedirection();
 //    app.UseSwaggerUI();
 //}
 
+//// NOTE: when doing Docker and Azure Container Services, the authentication redirect is failing and is redirecting to
+//// 'HTTP', not 'HTTPS', which causes the auth to fail.
+//// See https://stackoverflow.com/questions/53353601/redirect-after-authentication-is-to-http-when-it-should-be-https
+//// See https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/proxy-load-balancer?view=aspnetcore-6.0&viewFallbackFrom=aspnetcore-2.1
+//app.Use((context, next) =>
+//{
+//    context.Request.Scheme = "https";
+//    return next();
+//});
+//app.UseForwardedHeaders();
+
 // required if you want to use html, css, or image files...
 app.UseStaticFiles();
+app.UseHttpsRedirection();
 
 // routing matches HTTP request and dispatches them to proper endpoings
 app.UseRouting();

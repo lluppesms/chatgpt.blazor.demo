@@ -40,6 +40,11 @@ public class AppSettings
     public string UserName { get; set; }
 
     /// <summary>
+    /// Application Insights Key
+    /// </summary>
+    public string AppInsights_InstrumentationKey { get; set; }
+
+    /// <summary>
     /// OpenAI API Key
     /// </summary>
     public string OpenAIApiKey { get; set; }
@@ -48,11 +53,6 @@ public class AppSettings
     /// Name of Azure OpenAI Resource
     /// </summary>
     public string OpenAIResourceName { get; set; }
-
-    ///// <summary>
-    ///// OpenAI API URL for Chat
-    ///// </summary>
-    //public string OpenAIChatUrl { get; set; }
 
     /// <summary>
     /// OpenAI API URL for creating an image

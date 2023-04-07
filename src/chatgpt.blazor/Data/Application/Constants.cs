@@ -73,5 +73,15 @@ public class Constants
         /// </summary>
         public const string Size1024 = "1024x1024";
     }
-}
 
+    /// <summary>
+    /// Local Storage Constants
+    /// </summary>
+    public static class LocalStorage
+    {
+        /// <summary>
+        /// Session Object
+        /// </summary>
+        public const string SessionObject = "Session";
+    }
+}

@@ -1,8 +1,4 @@
 ﻿@page "/"
-@inject IChatService chatService
-@inject IJSRuntime JsInterop
-@inject AppDataService AppData
-
 <PageTitle>Lyle's Blazin' ChatGPT Example</PageTitle>
 
 <link href="css/Chat.css" rel="stylesheet" />
@@ -12,7 +8,7 @@
         <div class="chatbot-container">
             <div id="chatbot" class="chatbot">
                 <div id="conversation" class="conversation">
-                    <div class="chatbot-message" @ref="msgDiv">
+                    <div class="chatbot-message">
                         @foreach (var item in AppData.ChatMessageHistory)
                         {
                             <div class="@item.CSS">
@@ -77,77 +73,3 @@
         </div>
     </Column>
 </Row>
-
-@code {
-    private ElementReference msgDiv;
-
-    protected override async Task OnInitializedAsync()
-    {
-        // --> this always seems to fire twice for Server apps, so move logic to OnAfterRender
-        await base.OnInitializedAsync().ConfigureAwait(true);
-    }
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        await base.OnAfterRenderAsync(firstRender);
-
-        if (firstRender)
-        {
-            if (AppData.ChatMessageHistory.Count == 0)
-            {
-                AppData.ChatMessageHistory.Add(new MessageBubble("GPT", "Hello!", false));
-            }
-            await HideQueryForm(false);
-        }
-    }
-
-    private async void HandleFormSubmit()
-    {
-        await HideQueryForm(true);
-        try
-        {
-            // get rid of extra return characters, which seem to break the model...?
-            AppData.ChatCurrentMessage.LastRequest = AppData.ChatCurrentMessage.Request.Replace("\n", " "); ;
-            // reset form for next time
-            AppData.ChatCurrentMessage.Request = string.Empty;
-            // post the current message on the screen
-            AppData.ChatMessageHistory.Add(new MessageBubble("Me", AppData.ChatCurrentMessage.LastRequest, true));
-            // go get the API response
-            AppData.ChatCurrentMessage.Response = await chatService.GetResponse(
-              new OpenAIQuery(AppData.ChatSelectedModel, AppData.ChatTemperatureDec, AppData.ChatTokenValue, AppData.ChatCurrentMessage.LastRequest)
-            );
-            // post the repsonse to the screen
-            AppData.ChatMessageHistory.Add(new MessageBubble("GPT", AppData.ChatCurrentMessage.Response.Choices[0].Text, false, AppData.ChatCurrentMessage.Response.QueryInfo, AppData.ChatCurrentMessage.LastRequest, AppData.ChatTemperatureDec, AppData.ChatTokenValue));
-        }
-        catch (Exception ex)
-        {
-            AppData.ChatMessageHistory.Add(new MessageBubble("Error", ex.Message, false));
-        }
-        await HideQueryForm(false);
-    }
-
-    private async Task HideQueryForm(bool hideForm)
-    {
-        AppData.ChatShowQueryForm = !hideForm;
-        StateHasChanged();
-        if (AppData.ChatShowQueryForm)
-        {
-            await JsInterop.InvokeVoidAsync("focusOnInputField", "inputText");
-            await JsInterop.InvokeVoidAsync("scrollToBottomOfDiv", "conversation");
-            StateHasChanged();
-        }
-    }
-    private void HandleEnterKey(KeyboardEventArgs e)
-    {
-        if (e.Code == "Enter" || e.Code == "NumpadEnter")
-        {
-            HandleFormSubmit();
-        }
-    }
-    private async void ResetChat()
-    {
-        AppData.ChatMessageHistory = new();
-        AppData.ChatCurrentMessage = new();
-        AppData.ChatMessageHistory.Add(new MessageBubble("GPT", "Hello!", false));
-        await JsInterop.InvokeVoidAsync("focusOnInputField", "inputText");
-    }
-}

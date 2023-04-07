@@ -98,6 +98,17 @@ public class MessageBubble
     /// <summary>
     /// Constructor
     /// </summary>
+    public MessageBubble()
+    {
+        Username = string.Empty;
+        Body = string.Empty;
+        Mine = false;
+        Time = DateTime.Now;
+    }
+
+    /// <summary>
+    /// Constructor
+    /// </summary>
     public MessageBubble(string username, string body, bool mine)
     {
         Username = username;
