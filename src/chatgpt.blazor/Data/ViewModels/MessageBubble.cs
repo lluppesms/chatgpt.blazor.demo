@@ -6,8 +6,6 @@
 // Message Bubble
 // </summary>
 //-----------------------------------------------------------------------
-using Azure.Core;
-
 namespace chatgpt.blazor.data;
 
 /// <summary>
@@ -45,6 +43,11 @@ public class MessageBubble
     }
 
     /// <summary>
+    /// Elapsed Milliseconds to complete the query
+    /// </summary>
+    public long ElapsedMS { get; set; }
+
+    /// <summary>
     /// Detailed Query Info
     /// </summary>
     public string QueryInfo { get; set; }
@@ -59,6 +62,7 @@ public class MessageBubble
             if (Max_tokens > 0)
             {
                 return $"Time: {Time:h:mm:ss}\n" +
+                    $"Elapsed: {(decimal)ElapsedMS / 1000m} seconds\n" +
                     $"Request Temp: {Temperature}\n" +
                     $"Request Tokens: {Max_tokens}\n" +
                     $"{QueryInfo}";
@@ -100,8 +104,19 @@ public class MessageBubble
     /// </summary>
     public MessageBubble()
     {
-        Username = string.Empty;
-        Body = string.Empty;
+        Username = "GPT";
+        Body = "Hello!";
+        Mine = false;
+        Time = DateTime.Now;
+    }
+
+    /// <summary>
+    /// Constructor
+    /// </summary>
+    public MessageBubble(string username, string body)
+    {
+        Username = username;
+        Body = body;
         Mine = false;
         Time = DateTime.Now;
     }
@@ -120,22 +135,7 @@ public class MessageBubble
     /// <summary>
     /// Constructor
     /// </summary>
-    public MessageBubble(string username, string body, bool mine, string queryInfo)
-    {
-        Username = username;
-        Body = body;
-        Mine = mine;
-        Time = DateTime.Now;
-        QueryInfo = queryInfo;
-        Temperature = 0;
-        Max_tokens = 0;
-        Prompt = string.Empty;
-    }
-
-    /// <summary>
-    /// Constructor
-    /// </summary>
-    public MessageBubble(string username, string body, bool mine, string queryInfo, string prompt, decimal temperature, int tokens)
+    public MessageBubble(string username, string body, bool mine, string queryInfo, string prompt, decimal temperature, int tokens, long elapsed)
     {
         Username = username;
         Body = body;
@@ -145,5 +145,6 @@ public class MessageBubble
         Temperature = temperature;
         Max_tokens = tokens;
         Prompt = prompt;
+        ElapsedMS = elapsed;
     }
 }

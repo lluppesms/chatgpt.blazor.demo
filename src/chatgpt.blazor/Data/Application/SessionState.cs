@@ -71,9 +71,4 @@ public class SessionState
     /// Chat Message History
     /// </summary>
     public List<MessageBubble> ChatMessageHistory = new();
-
-    /// <summary>
-    /// Chat Show Query Form
-    /// </summary>
-    public bool ChatShowQueryForm = true;
 }

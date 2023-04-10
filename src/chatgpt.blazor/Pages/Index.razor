@@ -3,41 +3,31 @@
 
 <link href="css/Chat.css" rel="stylesheet" />
 
-<Row>
+<Row Class="chatbot-row">
     <Column ColumnSize="ColumnSize.Is8.OnDesktop.Is8.OnTablet.Is12.OnMobile">
         <div class="chatbot-container">
-            <div id="chatbot" class="chatbot">
-                <div id="conversation" class="conversation">
-                    <div class="chatbot-message">
-                        @foreach (var item in AppData.ChatMessageHistory)
-                        {
-                            <div class="@item.CSS">
-                                <div class="user">
-                                    @item.Username
-                                    <span title="@item.QueryInfoPlusTime"><i class="fas fa-info-circle" style="color: white; margin-left: 5px;"></i></span>
-                                </div>
-                                <div class="msg">@item.Body</div>
+            <div id="conversation" class="conversation">
+                <div class="chatbot-message">
+                    @foreach (var item in AppData.ChatMessageHistory)
+                    {
+                        <div class="@item.CSS">
+                            <div class="user">
+                                @item.Username
+                                <span title="@item.QueryInfoPlusTime"><Icon Name="IconName.InfoCircle" Class="WhiteIcon" /></span>
                             </div>
-                        }
-                    </div>
+                            <div class="msg">@item.Body</div>
+                        </div>
+                    }
                 </div>
-                <EditForm Model="@AppData.ChatCurrentMessage" OnSubmit="HandleFormSubmit">
-                    @if (AppData.ChatShowQueryForm)
-                    {
-                        <div class="message-container">
-                            <input id="inputText" type="text" @bind-value="AppData.ChatCurrentMessage.Request" @bind-value:event="oninput" style="width: 100%" class="input-lg" placeholder="enter your question" />
-                            <button class="btn btn-info" type="submit" style="margin: 0 5px 0 5px;">Send</button>
-                        </div>
-                    }
-                    @if (!AppData.ChatShowQueryForm)
-                    {
-                        <div class="d-flex">
-                            <div class="spinner-border" style="margin: 15px 0 0 0;" role="status" aria-hidden="true"></div>
-                            <strong style="margin: 20px 0 0 15px;">Searching the cloud for an answer...</strong>
-                        </div>
-                    }
-                </EditForm>
             </div>
+            <LoadingIndicator @ref="loadingIndicator">
+                <EditForm Model="@AppData.ChatCurrentMessage" OnSubmit="SubmitForm">
+                    <div class="message-container">
+                        <input id="inputText" type="text" @bind-value="AppData.ChatCurrentMessage.Request" @bind-value:event="oninput" style="width: 100%" class="input-lg" placeholder="enter your question" />
+                        <button class="btn btn-info" type="submit" style="margin: 0 5px 0 5px;">Send</button>
+                    </div>
+                </EditForm>
+            </LoadingIndicator>
         </div>
     </Column>
     <Column ColumnSize="ColumnSize.Is4.OnDesktop.Is4.OnTablet.Is12.OnMobile">
@@ -46,13 +36,13 @@
                 Settings:
             </Heading>
             <Paragraph Style="margin-top: 25px;">
-                <b>Temperature:</b> @AppData.ChatTemperature <span title="Controls randomness. Lowering the temperature means that the model will produce more repetitive and deterministic responses. Increasing the temperature will result in more unexpected or creative responses. Try adjusting temperature or Top P but not both."><i class="fas fa-info-circle" style="color: lightgray; margin-left: 5px;"></i></span>
+                <b>Temperature:</b> @AppData.ChatTemperature <span title="Controls randomness. Lowering the temperature means that the model will produce more repetitive and deterministic responses. Increasing the temperature will result in more unexpected or creative responses. Try adjusting temperature or Top P but not both."><Icon Name="IconName.InfoCircle" Class="LightGrayIcon" /></span>
             </Paragraph>
             <Field>
                 <Slider TValue="int" @bind-Value="@AppData.ChatTemperature" Min="10" Max="100" Step="5" />
             </Field>
             <Paragraph>
-                <b>Tokens:</b> @AppData.ChatTokenValue <span title="Set a limit on the number of tokens per model response. The API supports a maximum of 4000 tokens shared between the prompt (including system message, examples, message history, and user query) and the model's response. One token is roughly 4 characters for typical English text."><i class="fas fa-info-circle" style="color: lightgray; margin-left: 5px;"></i></span>
+                <b>Tokens:</b> @AppData.ChatTokenValue <span title="Set a limit on the number of tokens per model response. The API supports a maximum of 4000 tokens shared between the prompt (including system message, examples, message history, and user query) and the model's response. One token is roughly 4 characters for typical English text."><Icon Name="IconName.InfoCircle" Class="LightGrayIcon" /></span>
             </Paragraph>
             <Field>
                 <Slider TValue="int" @bind-Value="@AppData.ChatTokenValue" Min="25" Max="4000" Step="25" />
@@ -65,7 +55,7 @@
             </Paragraph>
             <Field>
                 <Select TValue="string" @bind-SelectedValue="@AppData.ChatSelectedModel">
-                    <SelectItem Value="@Constants.LanguageModelType.textDavinci003">@Constants.LanguageModelType.textDavinci003</SelectItem>
+                    <SelectItem Value="@data.Constants.LanguageModelType.textDavinci003">@data.Constants.LanguageModelType.textDavinci003</SelectItem>
                     @*<SelectItem Value="@Constants.LanguageModelType.gpt35turbo">@Constants.LanguageModelType.gpt35turbo</SelectItem>*@
                 </Select>
             </Field>
@@ -73,3 +63,4 @@
         </div>
     </Column>
 </Row>
+<SnackbarStack @ref="snackbarstack" Location="SnackbarStackLocation.End" />

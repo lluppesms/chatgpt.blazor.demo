@@ -59,12 +59,6 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<HttpContextAccessor>();
 
 //// ---- Add third party component startups ------------------------------------------------------------
-builder.Services.AddToaster(config =>
-{
-    config.PositionClass = Defaults.Classes.Position.TopRight;
-    config.PreventDuplicates = true;
-    config.NewestOnTop = false;
-});
 builder.Services
     .AddBlazorise(options =>
     {

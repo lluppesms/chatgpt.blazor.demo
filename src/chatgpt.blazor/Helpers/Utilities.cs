@@ -1,4 +1,12 @@
-﻿namespace chatgpt.blazor.Helpers;
+﻿//-----------------------------------------------------------------------
+// <copyright file="Utilities.cs" company="Luppes Consulting, Inc.">
+// Copyright 2023, Luppes Consulting, Inc. All rights reserved.
+// </copyright>
+// <summary>
+// Utilities
+// </summary>
+//-----------------------------------------------------------------------
+namespace chatgpt.blazor.Helpers;
 
 /// <summary>
 /// Utilities
@@ -201,7 +209,7 @@ public class Utilities
     /// <summary>
     /// Show Sweet Prompt
     /// </summary>
-    public static async Task<bool> ShowSweetPrompt(SweetAlertService swal, SweetAlertOptions options)
+    public static async Task<bool> QueryUserPrompt(SweetAlertService swal, SweetAlertOptions options)
     {
         var confirm = await swal.FireAsync(options).ConfigureAwait(false);
         return confirm.IsConfirmed;
@@ -210,9 +218,9 @@ public class Utilities
     /// <summary>
     /// Show Sweet Prompt
     /// </summary>
-    public static async Task<bool> ShowSweetPrompt(SweetAlertService swal, string title, string html, string confirmButtonTxt, string cancelButtonTxt = "Cancel", bool focusCancel = true)
+    public static async Task<bool> QueryUserPrompt(SweetAlertService swal, string title, string html, string confirmButtonTxt, string cancelButtonTxt = "Cancel", bool focusCancel = true)
     {
-        return await ShowSweetPrompt(swal, new SweetAlertOptions
+        return await QueryUserPrompt(swal, new SweetAlertOptions
         {
             Title = title,
             Html = html,
@@ -227,9 +235,9 @@ public class Utilities
     /// <summary>
     /// Show Popup HTML Message
     /// </summary>
-    public static async Task ShowSweetPopupHtml(SweetAlertService swal, string title, string html, string confirmButtonTxt = "OK")
+    public static async Task PromptUserHtml(SweetAlertService swal, string title, string html, string confirmButtonTxt = "OK")
     {
-        await ShowSweetPrompt(swal, new SweetAlertOptions
+        await QueryUserPrompt(swal, new SweetAlertOptions
         {
             Title = title,
             Html = html,

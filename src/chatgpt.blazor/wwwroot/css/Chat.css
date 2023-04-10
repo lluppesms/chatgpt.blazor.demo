@@ -1,29 +1,33 @@
-﻿.chatbot-container {
-    margin: 25px 5px 25px 5px;
+﻿.chatbot-row {
+    width: 100%;
+    height: 98%;
+    margin-top: 0px;
+}
+.chatbot-container {
+    margin: 5px 5px 25px 5px;
     background-color: #f5f5f5;
     border: 1px solid #cccccc;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 10px;
-}
-
-.chatbot {
-    background-color: #f5f5f5;
-    border: 1px solid #eef1f5;
-    box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.1);
-    border-radius: 4px;
+    height: 96%;
 }
 
 .message-container {
     width: 100%;
     display: flex;
     align-items: center;
+    padding-top: 10px;
 }
 
 .conversation {
-    height: 75vh;
+    height: 78vh;
     overflow-y: auto;
     padding: 20px;
+}
+.chatbot-message {
+    line-height: 20px;
+    padding: 10px;
 }
 
 @keyframes message-fade-in {
@@ -38,9 +42,6 @@
     }
 }
 
-.chatbot-message {
-    line-height: 20px;
-}
 
 .received, .sent {
     position: relative;
@@ -86,7 +87,7 @@
 }
 
 /* div within bubble for name */
-.user {
+    .user {
     font-size: 0.8em;
     font-weight: bold;
     color: #000;
