@@ -15,6 +15,7 @@ This application requires a few secrets to be configured in the application befo
 ```bash
     azd env set openAIResourceName <yourOpenAIAzureResourceName>
     azd env set openAIApiKey <yourOpenAIApiKey>
+    azd env set dallEApiKey <yourDallEApiKey>
 ```
 
 If you want your application to be authenticated, you will need to provide a Domain, TenantId and ClientId.  This is optional and only needed if you want to enable authentication.  The values come from an Azure Active Directory App Registration that is used to authorized this application. To add these values to the application, run the following commands:

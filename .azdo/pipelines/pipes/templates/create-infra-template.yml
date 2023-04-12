@@ -76,10 +76,12 @@ jobs:
       echo "orgNameLower=$(orgNameLower)"
       echo "fullAppName=$(fullAppName)"
       echo "fullAppNameLower=$(fullAppNameLower)"
+      echo "storageSku=$(storageSku)"
       echo "keyVaultOwnerUserId=$(keyVaultOwnerUserId)"
       echo "webSiteSku=$(webSiteSku)" 
-      echo "openAIApiKey=$(openAIApiKey)"
+      echo "openAIApiKey=******"
       echo "openAIResourceName=$(openAIResourceName)"
+      echo "dallEApiKey=******"
       echo "openAIImageGenerateUrl=$(openAIImageGenerateUrl)"
       echo "openAIImageEditUrl=$(openAIImageEditUrl)"
       echo "openAIImageSize=$(openAIImageSize)"
@@ -93,7 +95,7 @@ jobs:
       echo "Resource Group Command:"
       echo "  az group create --name $(resourceGroupName) --location $(location) --tags LastDeployed=$(runDateTime) Application=$(appName) Organization=$(orgName) Environment=$(environmentNameUpper)"
       echo "Bicep Deploy Sample Command:"
-      echo "  az deployment group create -n main-deploy-$(runDateTimeZ) --resource-group $(resourceGroupName) --template-file 'main.bicep' --parameters environmentCode $(environmentNameLower) location $(location) appName $(appName) orgName $(orgName) fullAppName $(fullAppName) keyVaultOwnerUserId $(keyVaultOwnerUserId) webSiteSku=$(webSiteSku) openAIApiKey=$(openAIApiKey) openAIResourceName=$(openAIResourceName) openAIImageGenerateUrl=$(openAIImageGenerateUrl) openAIImageEditUrl=$(openAIImageEditUrl) openAIImageSize=$(openAIImageSize) adDomain=$(adDomain) adTenantId=$(adTenantId) adClientId=$(adClientId) runDateTime $(runDateTime) openAIApiKey *****"
+      echo "  az deployment group create -n main-deploy-$(runDateTimeZ) --resource-group $(resourceGroupName) --template-file 'main.bicep' --parameters environmentCode $(environmentNameLower) location $(location) appName $(appName) orgName $(orgName) fullAppName $(fullAppName) keyVaultOwnerUserId $(keyVaultOwnerUserId) webSiteSku=$(webSiteSku) openAIApiKey=$(openAIApiKey) openAIResourceName=$(openAIResourceName) openAIImageGenerateUrl=$(openAIImageGenerateUrl) openAIImageEditUrl=$(openAIImageEditUrl) openAIImageSize=$(openAIImageSize) adDomain=$(adDomain) adTenantId=$(adTenantId) adClientId=$(adClientId) runDateTime $(runDateTime) openAIApiKey '*****' dallEApiKey 'xxxxx'"
     displayName: 'Display Variables'
     continueOnError: true
     # UBUNTU: echo "System.DefaultWorkingDirectory=$(System.DefaultWorkingDirectory)"
@@ -141,6 +143,7 @@ jobs:
         -openAIImageGenerateUrl "$(openAIImageGenerateUrl)"
         -openAIImageEditUrl "$(openAIImageEditUrl)"
         -openAIImageSize "$(openAIImageSize)"
+        -dallEApiKey "$(dallEApiKey)"
         -adDomain $(adDomain)
         -adTenantId $(adTenantId)
         -adClientId $(adClientId)
