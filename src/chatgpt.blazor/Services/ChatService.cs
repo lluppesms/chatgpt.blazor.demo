@@ -34,7 +34,7 @@ public class ChatService : IChatService
     /// </summary>
     public string LanguageModel { get => languageModel; set => languageModel = value; }
     #endregion
-    
+
     #region Initialization
     /// <summary>
     /// Constructor
@@ -50,12 +50,18 @@ public class ChatService : IChatService
     /// </summary>
     private void SetupHttpClient()
     {
-        var chatUrl = $"https://{appSettings.OpenAIResourceName}.openai.azure.com/openai/deployments/{languageModel}/completions?api-version=2022-12-01";
-        _httpClient = new()
+        if (string.IsNullOrEmpty(appSettings.OpenAIResourceName)) { 
+            _httpClient = null;
+        }
+        else
         {
-            BaseAddress = new Uri(chatUrl)
-        };
-        _httpClient.DefaultRequestHeaders.Add("api-key", $"{appSettings.OpenAIApiKey}");
+            var chatUrl = $"https://{appSettings.OpenAIResourceName}.openai.azure.com/openai/deployments/{languageModel}/completions?api-version=2022-12-01";
+            _httpClient = new()
+            {
+                BaseAddress = new Uri(chatUrl)
+            };
+            _httpClient.DefaultRequestHeaders.Add("api-key", $"{appSettings.OpenAIApiKey}");
+        }
     }
     #endregion
 
@@ -64,6 +70,7 @@ public class ChatService : IChatService
     /// </summary>
     public async Task<OpenAIResponse> GetResponse(OpenAIQuery queryModel)
     {
+        if (_httpClient == null) { return new OpenAIResponse($"An error occurred while initializing ChatGPT!"); }
         try
         {
             if (languageModel != queryModel.Model)

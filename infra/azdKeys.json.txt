@@ -1,8 +1,0 @@
-// to use AZD deploy, create an azdKeys.json file in this folder with this information:
-{
-    "openAIApiKey": "yourOpenAIApiKey",
-    "openAIResourceName": "yourOpenAIAzureResource",
-    "adDomain": "yourDomain.onmicrosoft.com",
-    "adTenantId": "yourTenantId",
-    "adClientId": "yourClientId"
-}

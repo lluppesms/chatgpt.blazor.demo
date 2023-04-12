@@ -7,6 +7,11 @@
 param name string
 param location string
 param principalId string = ''
+param openAIApiKey string = ''
+param openAIResourceName string = ''
+param adDomain string = ''
+param adTenantId string = ''
+param adClientId string = ''
 param runDateTime string = utcNow()
 
 // --------------------------------------------------------------------------------
@@ -27,9 +32,6 @@ resource resourceGroup 'Microsoft.Resources/resourceGroups@2020-06-01' = {
     tags: tags
 }
 
-// pull additional settings/keys from a JSON file that the user can edit locally
-var azdKeys = loadJsonContent('./azdKeys.json')
-
 module resources './Bicep/main.bicep' = {
     name: 'resources-${deploymentSuffix}'
     scope: resourceGroup
@@ -38,10 +40,10 @@ module resources './Bicep/main.bicep' = {
         fullAppName: name
         keyVaultOwnerUserId: principalId
         environmentCode: 'azd'
-        openAIApiKey: azdKeys.openAIApiKey
-        openAIResourceName: azdKeys.openAIResourceName
-        adDomain: azdKeys.adDomain
-        adTenantId: azdKeys.adTenantId
-        adClientId: azdKeys.adClientId
+        openAIApiKey: openAIApiKey
+        openAIResourceName: openAIResourceName
+        adDomain: adDomain
+        adTenantId: adTenantId
+        adClientId: adClientId
     }
 }

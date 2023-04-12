@@ -1,0 +1,40 @@
+﻿@page "/DallE"
+<PageTitle>Dall-E</PageTitle>
+
+<link href="css/Chat.css" rel="stylesheet" />
+
+<Row Style="padding: 20px; width: 95%;">
+    <Column ColumnSize="ColumnSize.Is12.OnDesktop.Is12.OnTablet.Is12.OnMobile">
+        <div class="chatbot-container">
+            <LoadingIndicator @ref="imagePromptLoadingIndicator">
+                <EditForm Model="@AppData" OnSubmit="SubmitForm">
+                    <div class="message-container">
+                        <b>Prompt:</b>
+                        <br />
+                        <input id="inputText" type="text" @bind-value="AppData.PromptText" @bind-value:event="oninput" style="width: 100%" class="input input-lg" placeholder="enter a picture description" />
+                        <br />
+                        <button class="btn btn-info" type="submit" style="margin: 15px;">Draw something for me!</button>
+                    </div>
+                </EditForm>
+            </LoadingIndicator>
+        </div>
+    </Column>
+</Row>
+
+<Row Style="padding: 20px; width: 95%;">
+    <Column ColumnSize="ColumnSize.Is12.OnDesktop.Is12.OnTablet.Is12.OnMobile">
+        <p>
+            @imagePromptToGenerate
+        </p>
+        <LoadingIndicator @ref="imageLoadingIndicator">
+            @if (showPicture)
+            {
+                <img src="@imageUrl" height="256" width="256" />
+            }
+        </LoadingIndicator>
+        <p>
+            @imageGeneratorStatus
+        </p>
+    </Column>
+</Row>
+<SnackbarStack @ref="snackbarstack" Location="SnackbarStackLocation.End" />

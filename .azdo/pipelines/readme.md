@@ -56,7 +56,5 @@ az pipelines variable-group create
       environmentCode='demo'
       openAIApiKey='<yourOpenAIApiKey>'
       openAIResourceName='<yourOpenAIAzureResource>'
-      openAIImageGenerateUrl='https://api.openai.com/v1/images/generations'
-      openAIImageEditUrl='https://api.openai.com/v1/images/edits'
-      openAIImageSize='512x512'
+      dalleApiKey='<yourDallEApiKey>'
 ```

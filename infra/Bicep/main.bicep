@@ -22,6 +22,7 @@ param openAIResourceName string = ''
 param openAIImageGenerateUrl string = 'https://api.openai.com/v1/images/generations'
 param openAIImageEditUrl string = 'https://api.openai.com/v1/images/edits'
 param openAIImageSize string = '512x512'
+param dallEApiKey string = ''
 
 param adInstance string = environment().authentication.loginEndpoint // 'https://login.microsoftonline.com/'
 param adDomain string = ''
@@ -90,6 +91,15 @@ module keyVaultSecret2 'keyvaultsecret.bicep' = {
     secretValue: openAIApiKey
   }
 }  
+module keyVaultSecret3 'keyvaultsecret.bicep' = {
+  name: 'keyVaultSecret3${deploymentSuffix}'
+  dependsOn: [ keyVaultModule, webSiteModule ]
+  params: {
+    keyVaultName: keyVaultModule.outputs.name
+    secretName: 'DallEApiKey'
+    secretValue: dallEApiKey
+  }
+}  
 
 // In a Linux app service, any nested JSON app key like AppSettings:MyKey needs to be 
 // configured in App Service as AppSettings__MyKey for the key name. 
@@ -109,6 +119,7 @@ module webSiteAppSettingsModule 'websiteappsettings.bicep' = {
       AppSettings__OpenAIImageGenerateUrl: openAIImageGenerateUrl
       AppSettings__OpenAIImageEditUrl: openAIImageEditUrl
       AppSettings__OpenAIImageSize: openAIImageSize
+      AppSettings__DallEApiKey: '@Microsoft.KeyVault(VaultName=${keyVaultModule.outputs.name};SecretName=DallEApiKey)'
 
       AzureAD__Instance: adInstance
       AzureAD__Domain: adDomain

@@ -122,7 +122,8 @@ html, body {
     /*font-size: 1.3rem;*/
     color: white;
     position: relative;
-    text-transform: uppercase;
+    /*text-transform: uppercase;*/
+    text-decoration: none;
     transition: 0.2s ease-out;
 }
 

@@ -8,21 +8,29 @@ This project has been configured to work with AZD commands to make it fast and e
 
 ## Configuration Secrets
 
-This application requires a few secrets to be configured in the application which allow for authentication and access to the ChatGPT API.  To configure these secrets, create a file named `infra\azdKeys.json` (copy and rename the template file `\azdKeys.json.txt`), and update these secret values:
+This application requires a few secrets to be configured in the application before being deployed. The two key things that are required for this demo are the name of an **existing Azure OpenAI Resource**, and the **API Key** for that resource. You can set them by running the following commands.
+
+*Note: the first time you run the azd command, you will be prompted for the Environment Name, Azure Subscription and Azure Region to use -- see section below for details on the Environment Name.*
 
 ```bash
-{
-    "openAIResourceName": "yourOpenAIAzureResource",
-    "openAIApiKey": "yourOpenAIApiKey",
-    "adDomain": "yourDomain.onmicrosoft.com",
-    "adTenantId": "yourTenantId",
-    "adClientId": "yourClientId"
-}
+    azd env set openAIResourceName <yourOpenAIAzureResourceName>
+    azd env set openAIApiKey <yourOpenAIApiKey>
 ```
 
-The OpenAI keys are required come from the resource that you created in the Azure portal for accessing the OpenAI API.
+If you want your application to be authenticated, you will need to provide a Domain, TenantId and ClientId.  This is optional and only needed if you want to enable authentication.  The values come from an Azure Active Directory App Registration that is used to authorized this application. To add these values to the application, run the following commands:
 
-The Domain, TenantId and ClientId are optional and only expected if you want to enable authentication.  The values come from an Azure Active Directory App Registration that is used to authorized this application.  Go to the App Registration -> Authentication Page, and enter a new Redirect URI for this application.  The Redirect URI should be something like `https://xxx-chatgpt.azurewebsites.net/signin-oidc` and `https://localhost:7078/signin-oidc`.
+```bash
+    azd env set adDomain <yourDomain.onmicrosoft.com>
+    azd env set adTenantId <yourTenantId>
+    azd env set adClientId <yourClientId>
+```
+
+You will also need to update the App Registration.  Go to the Authentication Page of the App Registration and enter a new Redirect URI for local development and Azure deployment of the application.
+
+The Redirect URIs should look something like:
+
+- `https://localhost:7078/signin-oidc`
+- `https://xxx-chatgpt.azurewebsites.net/signin-oidc`
 
 ---
 
@@ -47,12 +55,13 @@ Storage accounts and other resources will be named in a similarly fashion.
 
 ## Commands
 
-The four commands of most interest are:
+The five commands of most interest are:
 
 - **azd up**: provisions Azure resources, builds app, and deploys it to Azure
 - **azd provision**: provisions Azure resources but does not build and deploy the application
 - **azd deploy**: builds the app and deploys it to existing Azure resources
 - **azd down**: removes Azure resources create by this AZD command
+- **azd env set**: sets an environment variable to be used by the main.bicep file
 
 Typically a developer with either do the up command to do everything at once, or do the provision and deploy commands separately.
 

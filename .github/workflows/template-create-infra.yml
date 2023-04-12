@@ -37,15 +37,16 @@ jobs:
         echo "webSiteSku=${{ vars.WEBSITE_SKU }}"
         echo "subscriptionId=${{ vars.AZURE_SUBSCRIPTION_ID }}"
         echo "keyVaultOwnerUserId=${{ vars.KEYVAULT_OWNER_USERID }}"
-        echo "openAIResourceName=${{ vars.OPENAI_RESOURCE_NAME }}"
         echo "adDomain=${{ vars.AZURE_AD_DOMAIN }}"
         echo "adTenantId=${{ vars.AZURE_AD_TENANTID }}"
         echo "adClientId=${{ vars.AZURE_AD_CLIENTID }}"
         echo "openAIApiKey=${{ secrets.OPENAI_API_KEY }}"
+        echo "openAIResourceName=${{ vars.OPENAI_RESOURCE_NAME }}"
+        echo "dallEApiKey=${{ secrets.DALLE_API_KEY }}"
         echo "Resource Group Command:"
         echo "  az group create --name ${{ env.generatedResourceGroupName }} --location ${{ vars.LOCATION }} --tags Organization=${{ inputs.orgName }} Application=${{ inputs.appName }} Environment=${{ inputs.envCode }}"
         echo "Bicep Deploy Sample Command:"
-        echo "  az deployment group create -n main --resource-group ${{ env.generatedResourceGroupName }} --template-file 'infra/Bicep/main.bicep' --parameters environmentCode=${{ inputs.envCode }} location=${{ vars.LOCATION }} orgName=${{ inputs.orgName }} appName=${{ inputs.appName }} webSiteSku=${{ inputs.webSiteSku }} keyVaultOwnerUserId=${{ vars.KEYVAULT_OWNER_USERID }} openAIApiKey=${{ secrets.openAIApiKey }} openAIResourceName=${{ vars.openAIResourceName }} adDomain=${{ vars.adDomain }} adTenantId=${{ vars.adTenantId }} adClientId=${{ vars.adClientId }}"
+        echo "  az deployment group create -n main --resource-group ${{ env.generatedResourceGroupName }} --template-file 'infra/Bicep/main.bicep' --parameters environmentCode=${{ inputs.envCode }} location=${{ vars.LOCATION }} orgName=${{ inputs.orgName }} appName=${{ inputs.appName }} webSiteSku=${{ inputs.webSiteSku }} keyVaultOwnerUserId=${{ vars.KEYVAULT_OWNER_USERID }} openAIApiKey=${{ secrets.openAIApiKey }} openAIResourceName=${{ vars.openAIResourceName }} dallEApiKey=${{ secrets.dallEApiKey }} adDomain=${{ vars.adDomain }} adTenantId=${{ vars.adTenantId }} adClientId=${{ vars.adClientId }}"
         echo "Pipeline Workspace Directory Contents:"
         tree ${{ env.GITHUB_ACTION_PATH }}
       continue-on-error: true
@@ -85,3 +86,5 @@ jobs:
           adTenantId=${{ vars.AZURE_AD_TENANTID }}
           adClientId=${{ vars.AZURE_AD_CLIENTID }}
           openAIApiKey=${{ secrets.OPENAI_API_KEY }}
+          openAIResourceName=${{ secrets.OPENAI_RESOURCE_NAME }}
+          dallEApiKey=${{ secrets.DALLE_API_KEY }}

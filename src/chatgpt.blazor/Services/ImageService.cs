@@ -23,10 +23,10 @@ public class ImageService : IImageService
     /// </summary>
     public ImageService(AppSettings settings)
     {
-        apiKey = settings.OpenAIApiKey;
-        imageSize = string.IsNullOrEmpty(settings.OpenAIImageSize) ? settings.OpenAIImageSize : "512x512";
-        createImageRequestUri = string.IsNullOrEmpty(settings.OpenAIImageGenerateUrl) ? settings.OpenAIImageGenerateUrl : "https://api.openai.com/v1/images/generations";
-        editImageRequestUri = string.IsNullOrEmpty(settings.OpenAIImageEditUrl) ? settings.OpenAIImageEditUrl : "https://api.openai.com/v1/images/edits";
+        apiKey = settings.DallEApiKey; //  settings.OpenAIApiKey;
+        imageSize = !string.IsNullOrEmpty(settings.OpenAIImageSize) ? settings.OpenAIImageSize : "512x512";
+        createImageRequestUri = !string.IsNullOrEmpty(settings.OpenAIImageGenerateUrl) ? settings.OpenAIImageGenerateUrl : "https://api.openai.com/v1/images/generations";
+        editImageRequestUri = !string.IsNullOrEmpty(settings.OpenAIImageEditUrl) ? settings.OpenAIImageEditUrl : "https://api.openai.com/v1/images/edits";
     }
 
     /// <summary>
@@ -43,6 +43,8 @@ public class ImageService : IImageService
     /// </summary>
     public async Task<CreateImageResponse> CreateImage(CreateImageRequest createImageRequest)
     {
+        if (string.IsNullOrEmpty(apiKey)) { return new CreateImageResponse("500");  }
+
         using var client = new HttpClient();
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
         var request = new CreateImageRequest(createImageRequest.Prompt);
@@ -66,6 +68,8 @@ public class ImageService : IImageService
     /// </summary>
     public async Task<CreateImageResponse> EditImage(EditImageRequest editImageRequestDTO, string webRootPath)
     {
+        if (string.IsNullOrEmpty(apiKey)) { return new CreateImageResponse("500"); }
+
         var imagePath = await SaveFile(webRootPath, editImageRequestDTO!.File!);
         using var client = new HttpClient();
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);

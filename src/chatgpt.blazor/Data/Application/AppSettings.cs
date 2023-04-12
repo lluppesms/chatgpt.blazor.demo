@@ -55,6 +55,11 @@ public class AppSettings
     public string OpenAIResourceName { get; set; }
 
     /// <summary>
+    /// Dall-E Image API Key
+    /// </summary>
+    public string DallEApiKey { get; set; }
+
+    /// <summary>
     /// OpenAI API URL for creating an image
     /// </summary>
     public string OpenAIImageGenerateUrl { get; set; }
