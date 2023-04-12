@@ -35,9 +35,8 @@ Once you deploy the web application, you will need to download a Publish Profile
 
 ## Bicep Configuration Values
 
-These secrets are used by the Bicep templates to configure the resource names that are deployed.  
-Make sure the Org_Name + App_Name variable combination is unique to your deploy. It will be used as the basis for the website name and for all the other Azure resources, which must be globally unique.
-To create these additional secrets, customize and run this command:
+These variables and secrets are used by the Bicep templates to configure the resource names that are deployed.  Make sure the App_Name variable is unique to your deploy. It will be used as the basis for the website name and for all the other Azure resources, which must be globally unique.
+To create these additional secrets and variables, customize and run this command:
 
 Required Values:
 
@@ -59,7 +58,6 @@ gh variable set AZURE_AD_TENANTID -b 'yourTenantId'
 gh variable set AZURE_AD_CLIENTID -b 'yourClientId'
 
 gh secret set OPENAI_API_KEY -b '<yourOpenAIApiKey>'
-gh secret set OPENAI_RESOURCE_NAME -b '<yourOpenAIResourceName>'
 gh secret set DALLE_API_KEY -b '<yourDallEApiKey>'
 ```
 
