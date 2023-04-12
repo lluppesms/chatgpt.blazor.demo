@@ -5,7 +5,7 @@ parameters:
 - name: variableGroupName
   default:  'myVariableGroup'
 - name: environmentName
-  default:  'DEV'
+  default:  'DEMO'
 - name: appFolderName
   default: ''
 - name: appProjectName

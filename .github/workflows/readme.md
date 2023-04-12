@@ -59,6 +59,8 @@ gh variable set AZURE_AD_TENANTID -b 'yourTenantId'
 gh variable set AZURE_AD_CLIENTID -b 'yourClientId'
 
 gh secret set OPENAI_API_KEY -b '<yourOpenAIApiKey>'
+gh secret set OPENAI_RESOURCE_NAME -b '<yourOpenAIResourceName>'
+gh secret set DALLE_API_KEY -b '<yourDallEApiKey>'
 ```
 
 ---

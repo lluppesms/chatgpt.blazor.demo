@@ -1,9 +1,9 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="Index.razor.cs" company="Luppes Consulting, Inc.">
+// <copyright file="Chat.razor.cs" company="Luppes Consulting, Inc.">
 // Copyright 2023, Luppes Consulting, Inc. All rights reserved.
 // </copyright>
 // <summary>
-// Index Code-Behind
+// Chat Code-Behind
 // </summary>
 //-----------------------------------------------------------------------
 namespace chatgpt.blazor.Pages;

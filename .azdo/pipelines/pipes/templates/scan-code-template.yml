@@ -12,7 +12,7 @@
 # ----------------------------------------------------------------------------------------------------
 parameters:
 - name: environmentName
-  default: 'DEV'
+  default: 'DEMO'
 - name: runDevSecOpsScan
   default: 'true'
 - name: runPsRuleScan

@@ -20,7 +20,7 @@ stages:
     jobs:
     - template: templates/scan-code-template.yml
       parameters:
-        environmentName: 'DEV'
+        environmentName: 'DEMO'
         runDevSecOpsScan: ${{ parameters.runDevSecOpsScan }}
         runPsRuleScan: ${{ parameters.runPsRuleScan }}
 

@@ -6,7 +6,7 @@ Typically, you would want to set up either Option (a), or Option (b) AND Option 
 
 - **infra-and-website-pipeline.yml:** Deploys the main.bicep template, builds the website code, then deploys the website to the Azure App Service
 - **infra-only-pipeline.yml:** Deploys the main.bicep template and does nothing else
-- **app-only-pipeline.yml:** Builds the function app and then deploys the website to the Azure App Service
+- **app-only-pipeline.yml:** Builds the website and then deploys the website to the Azure App Service
 
 ---
 

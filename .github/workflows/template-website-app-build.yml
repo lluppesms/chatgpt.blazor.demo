@@ -15,7 +15,18 @@ on:
       rootDirectory:
         required: true
         type: string
-
+      projectName:
+        required: true
+        type: string
+      listFilesAfterBuild:
+        required: false
+        type: boolean
+        default: false
+      testApplication:
+        required: false
+        type: boolean
+        default: false
+  
 # ------------------------------------------------------------------------------------------------------------------------
 jobs:
   build:
@@ -43,24 +54,20 @@ jobs:
       run: dotnet restore "${{ inputs.rootDirectory }}"
 
     - name: Build
-      run: dotnet build "${{ inputs.rootDirectory }}" --configuration Release --no-restore
-    # - name: Build Application
-    #   shell: bash
-    #   run: |
-    #     pushd './${{ inputs.rootDirectory }}'
-    #     dotnet build --configuration Release --output ./output
-    #     popd
+      run: dotnet build "${{ inputs.rootDirectory }}/${{ inputs.projectName }}" --configuration Release --no-restore
 
-    # - name: List Files After Build
-    #   run: 
-    #     tree ${{ env.GITHUB_ACTION_PATH }}
-    #   continue-on-error: true
+    - name: List Files After Build
+      if: inputs.listFilesAfterBuild == true
+      run: 
+        tree ${{ env.GITHUB_ACTION_PATH }}
+      continue-on-error: true
 
-    #- name: Test Application
-    #  run: dotnet test "${{ inputs.rootDirectory }}" --no-build
+    - name: Test Application
+      if: inputs.testApplication == true
+      run: dotnet test "${{ inputs.rootDirectory }}/${{ inputs.projectName }}" --no-build
 
     - name: Publish
-      run: dotnet publish "${{ inputs.rootDirectory }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
+      run: dotnet publish "${{ inputs.rootDirectory }}/${{ inputs.projectName }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
 
     - name: Save Publish Artifacts
       uses: actions/upload-artifact@v3

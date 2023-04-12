@@ -1,4 +1,3 @@
-
 var builder = WebApplication.CreateBuilder(args);
 
 // ----------------------------------------------------------------------------------------------------
@@ -38,6 +37,7 @@ builder.Services.AddSingleton<AppSettings>(settings);
 builder.Services.AddSingleton<IImageService>(new ImageService(settings));
 builder.Services.AddSingleton<IChatService>(new ChatService(settings));
 
+// ----- Configure Authentication ---------------------------------------------------------------------
 var authSettings = builder.Configuration.GetSection("AzureAD");
 var enableAuth = !string.IsNullOrEmpty(authSettings["TenantId"]);
 if (enableAuth)

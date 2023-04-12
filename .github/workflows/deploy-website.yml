@@ -27,6 +27,7 @@ jobs:
     with:
       envCode: 'dev'
       rootDirectory: 'src/chatgpt.blazor'
+      projectName: 'chatgpt.blazor.csproj'
 
 # ------------------------------------------------------------------------------------------------------------------------
   deploy-dev:
