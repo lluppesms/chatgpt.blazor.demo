@@ -7,6 +7,7 @@
         "principalId": { "value": "${AZURE_PRINCIPAL_ID}" },
         "openAIApiKey": { "value": "${openAIApiKey}" },
         "openAIResourceName": { "value": "${openAIResourceName}" },
+        "dallEApiKey": { "value": "${dallEApiKey}" },
         "adDomain": { "value": "${adDomain}" },
         "adTenantId": { "value": "${adTenantId}" },
         "adClientId": { "value": "${adClientId}" }    

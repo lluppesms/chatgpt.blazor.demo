@@ -9,6 +9,7 @@ param location string
 param principalId string = ''
 param openAIApiKey string = ''
 param openAIResourceName string = ''
+param dallEApiKey string = ''
 param adDomain string = ''
 param adTenantId string = ''
 param adClientId string = ''
@@ -42,6 +43,7 @@ module resources './Bicep/main.bicep' = {
         environmentCode: 'azd'
         openAIApiKey: openAIApiKey
         openAIResourceName: openAIResourceName
+        dallEApiKey: dallEApiKey
         adDomain: adDomain
         adTenantId: adTenantId
         adClientId: adClientId
