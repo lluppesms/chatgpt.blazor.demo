@@ -6,7 +6,7 @@ name: chatgpt.blazor.demo
 infra:
     provider: bicep
     path: infra
-    module: main
+    module: azd-main
 
 pipeline:
     provider: github

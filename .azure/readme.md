@@ -8,9 +8,13 @@ This project has been configured to work with AZD commands to make it fast and e
 
 ## Configuration Secrets
 
-This application requires a few secrets to be configured in the application before being deployed. The two key things that are required for this demo are the name of an **existing Azure OpenAI Resource**, and the **API Key** for that resource. You can set them by running the following commands.
+This application requires a few secrets to be configured in the application before being deployed.
 
-*Note: the first time you run the azd command, you will be prompted for the Environment Name, Azure Subscription and Azure Region to use -- see section below for details on the Environment Name.*
+*`Note: these settings are stored in clear text in the .env file in the .azure/<yourEnvironment> directory. Be sure to edit the .azure/.gitignore file to exclude the <yourEnvironment> directory from being checked into source control!`*
+
+*Note: the first time you run the azd command, you will be prompted for the Environment Name, Azure Subscription and Azure Region to use -- see section below for information on choosing a good Environment Name.*
+
+The two key things that are required for this demo are the name of an **existing Azure OpenAI Resource**, and the **API Key** for that resource. You can set them by running the following commands.
 
 ```bash
     azd env set openAIResourceName <yourOpenAIAzureResourceName>
@@ -18,7 +22,7 @@ This application requires a few secrets to be configured in the application befo
     azd env set dallEApiKey <yourDallEApiKey>
 ```
 
-If you want your application to be authenticated, you will need to provide a Domain, TenantId and ClientId.  This is optional and only needed if you want to enable authentication.  The values come from an Azure Active Directory App Registration that is used to authorized this application. To add these values to the application, run the following commands:
+If you want your application to be authenticated, you will need to provide a Domain, TenantId and ClientId.  This is optional and only needed if you want to enable authentication.  If not specified, then anyone will be able to use the application. These values point to an Azure Active Directory App Registration that is used to authorized this application. To add these values to the application, run the following commands:
 
 ```bash
     azd env set adDomain <yourDomain.onmicrosoft.com>
@@ -26,9 +30,7 @@ If you want your application to be authenticated, you will need to provide a Dom
     azd env set adClientId <yourClientId>
 ```
 
-You will also need to update the App Registration.  Go to the Authentication Page of the App Registration and enter a new Redirect URI for local development and Azure deployment of the application.
-
-The Redirect URIs should look something like:
+In order to authenticate properly, the App Registration Authentication Page will have to be updated to include the Redirect URI for local development and Azure deployment of the application. The Redirect URIs should look something like:
 
 - `https://localhost:7078/signin-oidc`
 - `https://xxx-chatgpt.azurewebsites.net/signin-oidc`
