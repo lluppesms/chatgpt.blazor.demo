@@ -12,16 +12,18 @@ on:
       envCode:
         required: true
         type: string
-
+      listFilesBeforeDeploy:
+        required: false
+        type: boolean
+        default: false
+  
 # ------------------------------------------------------------------------------------------------------------------------
 jobs:
   deploy:
     name: Deploy
-    runs-on: windows-latest
-    
+    runs-on: ubuntu-latest
     environment:
       name: ${{ inputs.envCode }}
-
     env:
       artifactName: websiteapp
       generatedAppEnvName: ${{ vars.ORG_NAME }}-${{ vars.APP_NAME }}-${{ inputs.envCode }}
@@ -32,19 +34,46 @@ jobs:
       with:
         name: ${{ env.artifactName }}
 
-    # - name: List Files
-    #   run: 
-    #     tree ${{ env.GITHUB_ACTION_PATH }}
-    #   continue-on-error: true
+    - name: List Files After Build
+      if: inputs.listFilesBeforeDeploy == true
+      run: 
+        tree ${{ env.GITHUB_ACTION_PATH }}
+      continue-on-error: true
+  
+    - name: Create Runtime Variables
+      id: vars
+      shell: bash
+      run: |
+        readonly rundatetime=$(date +'%Y-%m-%dT%H:%M:%SZ')
+        echo "rundatetime=$rundatetime" >> $GITHUB_OUTPUT
+        readonly rundate=$(date +'%Y.%m.%d')
+        echo "rundate=$rundate" >> $GITHUB_OUTPUT
+        readonly commitbranch=$(echo ${GITHUB_REF#refs/heads/})
+        echo "commitbranch=$commitbranch" >> $GITHUB_OUTPUT
+        readonly commitsha=${GITHUB_SHA::6}
+        echo "commitsha=$commitsha" >> $GITHUB_OUTPUT
+      continue-on-error: true
+
+    - name: Put Build Details in buildinfo.json
+      shell: bash
+      run: |
+        echo -e -n "{\"buildDate\":\"${{ steps.vars.outputs.rundatetime }}\",\"buildNumber\":\"${{ steps.vars.outputs.rundate }}.${{ github.run_number }}\",\"buildId\":\"${{ github.run_id }}.${{ github.run_attempt }}\",\"run_id\":\"${{ github.run_id }}\",\"run_attempt\":\"${{ github.run_attempt }}\",\"run_number\":\"${{ github.run_number }}\",\"branchName\":\"${{ steps.vars.outputs.commitbranch }}\",\"commitHash\":\"${{ steps.vars.outputs.commitsha }}\"}" > ${{ env.GITHUB_ACTION_PATH }}buildinfo.json
+      continue-on-error: true
 
     - name: Log into Azure
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    - name: Deploy Azure Website Zip
+    - name: Deploy WebApp Zip
       uses: Azure/webapps-deploy@v2
       with:
         app-name: ${{ env.generatedAppEnvName }}
-        publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
         package: .
+
+    - name: Logout and cleanup
+      shell: bash
+      run: |
+        az logout
+        az cache purge
+        az account clear

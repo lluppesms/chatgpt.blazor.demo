@@ -1,10 +1,10 @@
 # ------------------------------------------------------------------------------------------------------------------------
-# GHA Workflow to deploy Website App Only
+# GHA Workflow to build and test Website App only - no deploy
 # ------------------------------------------------------------------------------------------------------------------------
 # You need to set up secrets in the GitHub Secrets Repository before running these workflows.
 #   See readme.md for details
 # ------------------------------------------------------------------------------------------------------------------------
-name: deploy.website
+name: build.website
 on:
   workflow_dispatch:
     inputs:
@@ -28,13 +28,8 @@ jobs:
       envCode: 'dev'
       rootDirectory: 'src/chatgpt.blazor'
       projectName: 'chatgpt.blazor.csproj'
+      #testDirectory: 'src/chatgpt.blazor'
+      #testProjectName: 'chatgpt.blazor.csproj'
+      #testApplication: true
+      testApplication: false
       listFilesAfterBuild: true
-
-# ------------------------------------------------------------------------------------------------------------------------
-  deploy-dev:
-    name: Deploy Website App
-    needs: build-app
-    uses: ./.github/workflows/template-website-app-deploy.yml
-    secrets: inherit
-    with:
-      envCode: 'dev'
