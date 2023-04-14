@@ -40,8 +40,8 @@ jobs:
         echo "adDomain=${{ vars.AZURE_AD_DOMAIN }}"
         echo "adTenantId=${{ vars.AZURE_AD_TENANTID }}"
         echo "adClientId=${{ vars.AZURE_AD_CLIENTID }}"
-        echo "openAIApiKey=${{ secrets.OPENAI_API_KEY }}"
         echo "openAIResourceName=${{ vars.OPENAI_RESOURCE_NAME }}"
+        echo "openAIApiKey=${{ secrets.OPENAI_API_KEY }}"
         echo "dallEApiKey=${{ secrets.DALLE_API_KEY }}"
         echo "Resource Group Command:"
         echo "  az group create --name ${{ env.generatedResourceGroupName }} --location ${{ vars.LOCATION }} --tags Organization=${{ inputs.orgName }} Application=${{ inputs.appName }} Environment=${{ inputs.envCode }}"
@@ -85,6 +85,6 @@ jobs:
           adDomain=${{ vars.AZURE_AD_DOMAIN }}
           adTenantId=${{ vars.AZURE_AD_TENANTID }}
           adClientId=${{ vars.AZURE_AD_CLIENTID }}
+          openAIResourceName=${{ vars.OPENAI_RESOURCE_NAME }}
           openAIApiKey=${{ secrets.OPENAI_API_KEY }}
-          openAIResourceName=${{ secrets.OPENAI_RESOURCE_NAME }}
           dallEApiKey=${{ secrets.DALLE_API_KEY }}
