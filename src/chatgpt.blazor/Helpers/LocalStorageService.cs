@@ -13,7 +13,7 @@ public class SessionStorageService
     public async Task<SessionState> GetState()
     {
         SessionState state = new();
-        var json = await localStorageSvc.GetItemAsync<string>(data.Constants.LocalStorage.SessionObject);
+        var json = await localStorageSvc.GetItemAsync<string>(Data.Constants.LocalStorage.SessionObject);
         if (!string.IsNullOrEmpty(json))
         {
             if (json.Contains('~'))
@@ -32,7 +32,7 @@ public class SessionStorageService
     {
         var json = JsonConvert.SerializeObject(state);
         json = json.Replace("\"", "~");
-        await localStorageSvc.SetItemAsync(data.Constants.LocalStorage.SessionObject, json);
+        await localStorageSvc.SetItemAsync(Data.Constants.LocalStorage.SessionObject, json);
     }
 
     /// <summary>
@@ -40,7 +40,7 @@ public class SessionStorageService
     /// </summary>
     public async Task RemoveState()
     {
-        await localStorageSvc.RemoveItemAsync(data.Constants.LocalStorage.SessionObject);
+        await localStorageSvc.RemoveItemAsync(Data.Constants.LocalStorage.SessionObject);
     }
 
     /// <summary>

@@ -22,16 +22,16 @@ public class MyClaimsTransformation : IClaimsTransformation
         if (principal != null && principal.Identity != null)
         {
             claimsIdentity = new ClaimsIdentity(principal.Identity);
-            var isAdmin = claimsIdentity.Name.Contains(data.Constants.Security.SuperUserFirstName, StringComparison.InvariantCultureIgnoreCase) && claimsIdentity.Name.Contains(data.Constants.Security.SuperUserLastName, StringComparison.InvariantCultureIgnoreCase);
+            var isAdmin = claimsIdentity.Name.Contains(Data.Constants.Security.SuperUserFirstName, StringComparison.InvariantCultureIgnoreCase) && claimsIdentity.Name.Contains(Data.Constants.Security.SuperUserLastName, StringComparison.InvariantCultureIgnoreCase);
 
-            if (isAdmin && !principal.IsInRole(data.Constants.Security.AdminRoleName))
+            if (isAdmin && !principal.IsInRole(Data.Constants.Security.AdminRoleName))
             {
-                claimsIdentity.AddClaim(new Claim(claimsIdentity.RoleClaimType, data.Constants.Security.AdminRoleName));
+                claimsIdentity.AddClaim(new Claim(claimsIdentity.RoleClaimType, Data.Constants.Security.AdminRoleName));
             }
 
-            //if (isAdmin && !principal.HasClaim(claim => claim.Type == data.Constants.Security.AdminClaimType))
+            //if (isAdmin && !principal.HasClaim(claim => claim.Type == Data.Constants.Security.AdminClaimType))
             //{
-            //    claimsIdentity.AddClaim(new Claim(data.Constants.Security.AdminClaimType, "true"));
+            //    claimsIdentity.AddClaim(new Claim(Data.Constants.Security.AdminClaimType, "true"));
             //}
         }
 

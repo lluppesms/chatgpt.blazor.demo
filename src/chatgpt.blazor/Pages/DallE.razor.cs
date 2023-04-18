@@ -57,7 +57,7 @@ public partial class DallE : ComponentBase
         {
             await imageLoadingIndicator.Show();
             await imagePromptLoadingIndicator.Show();
-            imageGeneratorStatus = data.Constants.OpenAIMessages.SendingRequest;
+            imageGeneratorStatus = Data.Constants.OpenAIMessages.SendingRequest;
             StateHasChanged();
             var createImageRequest = new CreateImageRequest(imagePromptToGenerate);
             var timer = Stopwatch.StartNew();
@@ -66,18 +66,18 @@ public partial class DallE : ComponentBase
             if (response != null && response.Data != null)
             {
                 imageUrl = response.Data[0].Url;
-                imageGeneratorStatus = data.Constants.OpenAIMessages.Finished;
+                imageGeneratorStatus = Data.Constants.OpenAIMessages.Finished;
                 showPicture = true;
             }
             else
             {
-                imageGeneratorStatus = $"{data.Constants.OpenAIMessages.Error} ({response.Message})";
+                imageGeneratorStatus = $"{Data.Constants.OpenAIMessages.Error} ({response.Message})";
             }
             await snackbarstack.PushAsync($"Image Elapsed: {(decimal)elaspsedMS / 1000m:0.0} seconds", SnackbarColor.Info);
         }
         catch (Exception ex)
         {
-            imageGeneratorStatus = $"{data.Constants.OpenAIMessages.Error} ({ex.Message})"; ;
+            imageGeneratorStatus = $"{Data.Constants.OpenAIMessages.Error} ({ex.Message})"; ;
         }
         await imageLoadingIndicator.Hide();
         await imagePromptLoadingIndicator.Hide();

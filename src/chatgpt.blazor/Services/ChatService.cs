@@ -6,7 +6,7 @@
 // OpenAI Chat Service
 // </summary>
 //-----------------------------------------------------------------------
-namespace chatgpt.blazor.data;
+namespace chatgpt.blazor.Data;
 
 /// <summary>
 /// Chat Service Implementation

@@ -6,7 +6,7 @@
 // OpenAI Response Model
 // </summary>
 //-----------------------------------------------------------------------
-namespace chatgpt.blazor.data;
+namespace chatgpt.blazor.Data;
 
 /// <summary>
 /// OpenAI Response

@@ -6,7 +6,7 @@
 // OpenAI Query
 // </summary>
 //-----------------------------------------------------------------------
-namespace chatgpt.blazor.data;
+namespace chatgpt.blazor.Data;
 
 /// <summary>
 /// OpenAI Query

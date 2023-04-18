@@ -6,7 +6,7 @@
 // OpenAI Image Service
 // </summary>
 //-----------------------------------------------------------------------
-namespace chatgpt.blazor.data;
+namespace chatgpt.blazor.Data;
 
 /// <summary>
 /// Image Service Implementation

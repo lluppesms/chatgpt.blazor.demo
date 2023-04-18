@@ -6,7 +6,7 @@
 // Message Bubble
 // </summary>
 //-----------------------------------------------------------------------
-namespace chatgpt.blazor.data;
+namespace chatgpt.blazor.Data;
 
 /// <summary>
 /// Message Bubble

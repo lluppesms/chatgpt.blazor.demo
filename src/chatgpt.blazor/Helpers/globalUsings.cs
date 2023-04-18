@@ -4,7 +4,7 @@ global using Blazorise.Bootstrap5;
 global using Blazorise.Icons.FontAwesome;
 global using Blazorise.LoadingIndicator;
 global using Blazorise.Snackbar;
-global using chatgpt.blazor.data;
+global using chatgpt.blazor.Data;
 global using chatgpt.blazor.Helpers;
 global using CurrieTechnologies.Razor.SweetAlert2;
 global using FluentValidation.AspNetCore;
