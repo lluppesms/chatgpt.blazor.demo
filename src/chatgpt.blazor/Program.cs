@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // ----------------------------------------------------------------------------------------------------
@@ -52,6 +54,8 @@ if (enableAuth)
     {
         options.FallbackPolicy = options.DefaultPolicy;
     });
+    // Add isAdmin claim and admin role membership attribute
+    builder.Services.AddTransient<IClaimsTransformation, MyClaimsTransformation>();
 }
 
 // ----- Configure Context Accessor -------------------------------------------------------------------

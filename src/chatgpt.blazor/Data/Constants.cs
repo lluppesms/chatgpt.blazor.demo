@@ -84,4 +84,34 @@ public class Constants
         /// </summary>
         public const string SessionObject = "Session";
     }
+
+
+    /// <summary>
+    /// Security Constants
+    /// </summary>
+    public static class Security
+    {
+        /// <summary>
+        /// Admin Claim Type Name
+        /// </summary>
+        public const string AdminClaimType = "isAdmin";
+
+        /// <summary>
+        /// Admin Role Name
+        /// </summary>
+        public const string AdminRoleName = "Admin";
+
+        // These constants are used to determine who the super admin is...
+        // Yes... this is a hack, but it works for a simple example...
+        // This should be replaced by actual Active Directory roles...
+
+        /// <summary>
+        /// Super User First Name
+        /// </summary>
+        public const string SuperUserFirstName = "lyle";
+        /// <summary>
+        /// Super User Last Name
+        /// </summary>
+        public const string SuperUserLastName = "luppes";
+    }
 }

@@ -11,7 +11,7 @@ namespace chatgpt.blazor.Pages;
 /// <summary>
 /// Index Page
 /// </summary>
-public partial class Chat : ComponentBase
+public partial class SimpleChat : ComponentBase
 {
     [Inject] IChatService chatService { get; set; }
     [Inject] IJSRuntime JsInterop { get; set; }

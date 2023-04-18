@@ -1,0 +1,17 @@
+﻿@page "/admin"
+<PageTitle>Admin</PageTitle>
+
+<Blazorise.Div Style="padding: 25px;">
+    <h1>Admin Page</h1>
+    <p>You are logged in as: @userName</p>
+
+    <AuthorizeView Roles="Admin">
+        <p>You are in the the Admin role!</p>
+        <ul>
+            <li>Build Info: @buildInfo</li>
+            <li>OpenAI Key: @openAIKeyInfo</li>
+            <li>DallE Key: @dallEKeyInfo</li>
+        </ul>
+    </AuthorizeView>
+
+</Blazorise.Div>

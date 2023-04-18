@@ -159,6 +159,9 @@ html, body {
         border-top: 1rem solid #5D6C90; /* #33A145; */ /*rgb(205,51,51);*/
     }
 
+.wideButton {
+    width: 250px;
+}
 
 .JokeCard {
     background: #c3e0ff;

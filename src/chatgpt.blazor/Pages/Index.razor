@@ -2,8 +2,9 @@
 <PageTitle>Lyle's Blazin' ChatGPT Example</PageTitle>
 
 <div style="padding: 30px;">
-    <a class="btn btn-primary" href="/Chat"><Icon Name="IconName.Pen" Class="WhiteIcon" /> Talk to Chat-GPT</a>
-    <br />
-    <br />
-    <a class="btn btn-primary" href="/DallE"><Icon Name="IconName.Palette" Class="WhiteIcon" /> Create some DallE Images</a>
+    <p><a class="btn btn-primary wideButton" @onclick='(() => GoToPage("SimpleChat"))'><Icon Name="IconName.Pen" Class="WhiteIcon" /> Talk to Chat-GPT</a></p>
+    <p><a class="btn btn-primary wideButton" @onclick='(() => GoToPage("DallE"))'><Icon Name="IconName.Palette" Class="WhiteIcon" /> Create some DallE Images</a></p>
+    @*<AuthorizeView Roles="Admin">
+        <p><a class="btn btn-primary" @onclick='(() => GoToPage("Admin"))'><Icon Name="IconName.Key" Class="WhiteIcon" /> Admin Page</a></p>
+    </AuthorizeView>*@
 </div>

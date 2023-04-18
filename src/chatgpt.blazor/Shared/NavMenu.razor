@@ -3,7 +3,7 @@
 <NavLink class="nav-tab-top" href="" Match="NavLinkMatch.All">
     <Icon Name="IconName.Home" Class="WhiteIcon" /> Home
 </NavLink>
-<NavLink class="nav-tab-top" href="Chat">
+<NavLink class="nav-tab-top" href="SimpleChat">
     <Icon Name="IconName.Pen" Class="WhiteIcon" /> Chat
 </NavLink>
 <NavLink class="nav-tab-top" href="DallE">
@@ -12,3 +12,8 @@
 <NavLink class="nav-tab-top" href="About">
     <Icon Name="IconName.InfoCircle" Class="WhiteIcon" /> About
 </NavLink>
+<AuthorizeView Roles="Admin">
+    <NavLink class="nav-tab-top" href="Admin">
+        <Icon Name="IconName.Key" Class="WhiteIcon" /> Admin
+    </NavLink>
+</AuthorizeView>

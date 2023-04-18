@@ -1,22 +1,25 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="About.razor.cs" company="Luppes Consulting, Inc.">
+// <copyright file="Admin.razor.cs" company="Luppes Consulting, Inc.">
 // Copyright 2023, Luppes Consulting, Inc. All rights reserved.
 // </copyright>
 // <summary>
-// About Code-Behind
+// Admin Code-Behind
 // </summary>
 //-----------------------------------------------------------------------
 namespace chatgpt.blazor.Pages;
 
 /// <summary>
-/// About Page
+/// Admin Page
 /// </summary>
-public partial class About : ComponentBase
+public partial class Admin : ComponentBase
 {
     [Inject] AppSettings Settings { get; set; }
     [Inject] HttpContextAccessor Context { get; set; }
 
+    private string userName = string.Empty;
     private string buildInfo = string.Empty;
+    private string openAIKeyInfo = string.Empty;
+    private string dallEKeyInfo = string.Empty;
 
     /// <summary>
     /// Initialization
@@ -36,22 +39,26 @@ public partial class About : ComponentBase
 
         if (firstRender)
         {
-            var userName = Context.HttpContext.User.Identity?.Name;
-            if (userName != null && userName.Contains("lyle", StringComparison.InvariantCultureIgnoreCase) && userName.Contains("luppes", StringComparison.InvariantCultureIgnoreCase))
+            var userIdentity = Context.HttpContext.User;
+            userName = userIdentity != null ? userIdentity.Identity.Name : string.Empty;
+            var isInAdminRole = userIdentity != null && userIdentity.IsInRole("Admin");
+            // var isAdmin = userIdentity != null && userIdentity.HasClaim(claim => claim.Type == "isAdmin");
+            if (isInAdminRole)
             {
                 try
                 {
                     var buildInfoFile = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "buildinfo.json");
-                    if (System.IO.File.Exists(buildInfoFile))
+                    if (File.Exists(buildInfoFile))
                     {
                         using (var r = new StreamReader(buildInfoFile))
                         {
                             var buildInfoData = r.ReadToEnd();
                             var buildInfoObject = JsonConvert.DeserializeObject<BuildInfo>(buildInfoData);
-                            buildInfo = $"Build: {buildInfoObject.BuildNumber}";
+                            buildInfo = buildInfoObject.BuildNumber;
                         }
                     }
-                    buildInfo += string.IsNullOrEmpty(Settings.OpenAIApiKey) ? string.Empty : " " + Settings.OpenAIApiKey.Substring(0, 4);
+                    openAIKeyInfo = string.IsNullOrEmpty(Settings.OpenAIApiKey) ? string.Empty : Settings.OpenAIApiKey[..4] + "...";
+                    dallEKeyInfo = string.IsNullOrEmpty(Settings.DallEApiKey) ? string.Empty : Settings.DallEApiKey[..4] + "...";
                 }
                 catch (Exception)
                 {
