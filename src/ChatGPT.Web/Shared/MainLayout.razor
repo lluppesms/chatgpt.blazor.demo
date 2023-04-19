@@ -1,0 +1,35 @@
+﻿@inherits LayoutComponentBase
+@namespace ChatGPT.Web
+
+<PageTitle>@Data.Constants.ApplicationTitle</PageTitle>
+
+<Blazorise.Layout>
+    <Blazorise.LayoutHeader Fixed="true">
+        <div class="top-bar">
+            <a class="logo hideIfReallyNarrow" href=""><img src="/Favicon.png" height="55" alt="Logo" /></a>
+            <a class="navbar-brand hideIfNarrow" href="" id="headerPageTitle">@Data.Constants.ApplicationTitle</a>
+            <NavMenu />
+            <div class="float-end navbar-login">
+                <LoginDisplay />
+            </div>
+        </div>
+    </Blazorise.LayoutHeader>
+
+    <Blazorise.LayoutContent Class="LayoutContentContainer">
+        <Blazorise.Div Class="LayoutContentStyle">
+            @Body
+        </Blazorise.Div>
+    </Blazorise.LayoutContent>
+
+    <Blazorise.LayoutFooter Fixed="true" Class="LayoutFooterStyle">
+        Copyright @thisYear, Luppes Consulting, Inc.
+        <a href="http://www.luppes.com/Privacy" target="_blank">Privacy</a>
+        <a href="http://www.luppes.com/License" target="_blank">License</a>
+        <Div Class="float-end">Version @assemblyVersionNumber</Div>
+    </Blazorise.LayoutFooter>
+</Blazorise.Layout>
+
+@code {
+    int thisYear = DateTime.Today.Year;
+    string assemblyVersionNumber => Assembly.GetEntryAssembly().GetName().Version.ToString();
+}

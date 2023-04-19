@@ -1,6 +1,8 @@
 # Lyle's Blazor ChatGPT Demo
 
-This is a simple Blazor Application that create a chatbot window and interacts with the ChatGPT API. This should provide a good example of that code and how to deploy a Blazor application via Azure DevOps, GitHub Actions, or AZD command line tools.
+This is a simple Blazor Application that create a chatbot window and interacts with the ChatGPT API, using both a direct API call and the more fully-featured [OkGoDoIt](https://github.com/OkGoDoIt/OpenAI-API-dotnet/) open source library.
+
+This project should provide a good example of that code and also an example of how to deploy a Blazor application via Azure DevOps, GitHub Actions, and AZD command line tools.
 
 [![Open in vscode.dev](https://img.shields.io/badge/Open%20in-vscode.dev-blue)][1]
 

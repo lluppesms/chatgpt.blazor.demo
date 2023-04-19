@@ -1,0 +1,9 @@
+﻿@page "/"
+<PageTitle>@Data.Constants.ApplicationTitle</PageTitle>
+
+<div style="padding: 30px;">
+    <p><a class="btn btn-primary wideButton" @onclick='(() => GoToPage("Chat"))'><Icon Name="IconName.Users" Class="WhiteIcon" /> Chat using OkGoDoIt </a></p>
+    <p><a class="btn btn-primary wideButton" @onclick='(() => GoToPage("SimpleImage"))'><Icon Name="IconName.Palette" Class="WhiteIcon" /> Create some DallE Images</a></p>
+    <p></p>
+    <p><a class="btn btn-primary wideButton" @onclick='(() => GoToPage("SimpleChat"))'><Icon Name="IconName.User" Class="WhiteIcon" /> My Simple Chat Example</a></p>
+</div>

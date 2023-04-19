@@ -13,6 +13,6 @@ pipeline:
 
 services:
   web:
-    project: ./src/chatgpt.blazor/
+    project: ./src/ChatGPT.Web/
     language: csharp
     host: appservice

@@ -10,9 +10,9 @@ This project has been configured to work with AZD commands to make it fast and e
 
 This application requires a few secrets to be configured in the application before being deployed.
 
-*`Note: these settings are stored in clear text in the .env file in the .azure/<yourEnvironment> directory. Be sure to edit the .azure/.gitignore file to exclude the <yourEnvironment> directory from being checked into source control!`*
+> *`Note 1: these settings are stored in clear text in the .env file in the .azure/<yourEnvironment> directory. Be sure to edit the .azure/.gitignore file to exclude the <yourEnvironment> directory from being checked into source control!`*
 
-*Note: the first time you run the azd command, you will be prompted for the Environment Name, Azure Subscription and Azure Region to use -- see section below for information on choosing a good Environment Name.*
+> *Note 2: the first time you run the azd command, you will be prompted for the Environment Name, Azure Subscription and Azure Region to use -- see section below for information on choosing a good Environment Name.*
 
 The two key things that are required for this demo are the name of an **existing Azure OpenAI Resource**, and the **API Key** for that resource. You can set them by running the following commands.
 
@@ -22,7 +22,7 @@ The two key things that are required for this demo are the name of an **existing
     azd env set dallEApiKey <yourDallEApiKey>
 ```
 
-If you want your application to be authenticated, you will need to provide a Domain, TenantId and ClientId.  This is optional and only needed if you want to enable authentication.  If not specified, then anyone will be able to use the application. These values point to an Azure Active Directory App Registration that is used to authorized this application. To add these values to the application, run the following commands:
+If you want your application to be authenticated, you will need to provide a Domain, TenantId and ClientId.  This is optional and only needed if you want to enable authentication.  If not specified, then anyone will be able to use the application, which would be fine if you are just doing a local demo. These values should point to an Azure Active Directory App Registration that is used to authorized this application. To add these values to the application, run the following commands:
 
 ```bash
     azd env set adDomain <yourDomain.onmicrosoft.com>
@@ -30,7 +30,7 @@ If you want your application to be authenticated, you will need to provide a Dom
     azd env set adClientId <yourClientId>
 ```
 
-In order to authenticate properly, the App Registration Authentication Page will have to be updated to include the Redirect URI for local development and Azure deployment of the application. The Redirect URIs should look something like:
+In order for the authentication to work properly, the App Registration Authentication Page will have to be updated to include the Redirect URI for local development and Azure deployment of the application. The Redirect URIs should look something like:
 
 - `https://localhost:7078/signin-oidc`
 - `https://xxx-chatgpt.azurewebsites.net/signin-oidc`
@@ -41,7 +41,7 @@ In order to authenticate properly, the App Registration Authentication Page will
 
 When an AZD command is run for the first time, a prompt will ask for the "Environment Name", the Azure Subscription to use and the Azure Region to deploy to.
 
-*NOTE: this Environment Name is NOT an environment code like [dev/qa/prod]!*
+> *`NOTE: This "Environment Name" is NOT an environment code like [dev/qa/prod]!`*
 
 Choose the "Environment Name" carefully, as it will be used as the basis to name all of the resources, so it must be unique. Use a naming convention like *[yourInitials]-[appName]* or *[yourOrganization]-[appName]* as the format for Environment Name. The resulting web application name `MUST` be globally unique.
 
@@ -56,7 +56,7 @@ Storage accounts and other resources will be named in a similarly fashion.
 
 ---
 
-## Commands
+## AZD Commands
 
 The five commands of most interest are:
 
