@@ -134,5 +134,10 @@ public static class Constants
         /// Simple Chat Session Object
         /// </summary>
         public const string SimpleChatSessionObject = "SimpleChat";
+
+        /// <summary>
+        /// New Session?
+        /// </summary>
+        public const string NewSessionObject = "NewSession";
     }
 }

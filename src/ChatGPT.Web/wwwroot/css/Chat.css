@@ -1,6 +1,5 @@
 ﻿.chatbot-row {
-    width: 100%;
-    height: 98%;
+    height: 92%;
     margin-top: 0px;
 }
 .chatbot-container {
@@ -21,7 +20,7 @@
 }
 
 .conversation {
-    height: 78vh;
+    height: 68vh;
     overflow-y: auto;
     padding: 20px;
 }

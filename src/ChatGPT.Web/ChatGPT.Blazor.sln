@@ -5,9 +5,9 @@ VisualStudioVersion = 17.5.33502.453
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatGPT.Web", "ChatGPT.Web.csproj", "{1DAE12C3-DC0F-4607-BEF4-1B39AA10DC59}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatGPT.DataLayer", "..\ChatGPT.DataLayer\ChatGPT.DataLayer.csproj", "{CF1A69BE-A6CC-4B8D-BDF7-818F7777E288}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatGPT.DataLayer", "..\ChatGPT.DataLayer\ChatGPT.DataLayer.csproj", "{CF1A69BE-A6CC-4B8D-BDF7-818F7777E288}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatGPT.Entities", "..\ChatGPT.Entities\ChatGPT.Entities.csproj", "{C29048EE-19E4-4B2E-A3D3-C1C5BB434E05}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatGPT.Entities", "..\ChatGPT.Entities\ChatGPT.Entities.csproj", "{C29048EE-19E4-4B2E-A3D3-C1C5BB434E05}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

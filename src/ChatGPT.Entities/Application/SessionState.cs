@@ -1,4 +1,12 @@
-﻿namespace ChatGPT.Data;
+﻿//-----------------------------------------------------------------------
+// <copyright file="SessionState.cs" company="Luppes Consulting, Inc.">
+// Copyright 2023, Luppes Consulting, Inc. All rights reserved.
+// </copyright>
+// <summary>
+// Session Variables
+// </summary>
+//-----------------------------------------------------------------------
+namespace ChatGPT.Data;
 
 /// <summary>
 /// Session Variables
@@ -63,6 +71,11 @@ public class SessionState
     public string ChatSelectedModel = Constants.LanguageModelType.gpt35turbo;
 
     /// <summary>
+    /// Chat Selected Personality Model
+    /// </summary>
+    public string Personality = string.Empty;
+
+    /// <summary>
     /// Chat Current Message
     /// </summary>
     public ChatMessage ChatCurrentMessage = new();
@@ -85,5 +98,17 @@ public class SessionState
     public SessionState(string chatSelectedModel)
     {
         ChatSelectedModel = chatSelectedModel;
+    }
+
+    /// <summary>
+    /// Returns LastMessage plus a personality setting
+    /// </summary>
+    public string MessagePlusPersonality
+    {
+        get
+        {
+            var personality = ChatPersonality.Personalities.Where(p => p.Name == Personality).FirstOrDefault();
+            return personality == null ? ChatCurrentMessage.LastRequest : $"{personality.Prompt} {ChatCurrentMessage.LastRequest}";
+        }
     }
 }

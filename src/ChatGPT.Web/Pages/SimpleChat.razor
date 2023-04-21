@@ -3,67 +3,87 @@
 
 <link href="css/Chat.css" rel="stylesheet" />
 
-<Row Class="chatbot-row">
-    <Column ColumnSize="ColumnSize.Is8.OnDesktop.Is8.OnTablet.Is12.OnMobile">
-        <div class="chatbot-container">
-            <div id="conversation" class="conversation">
-                <div class="chatbot-message">
-                    @foreach (var item in SimpleAppData.ChatMessageHistory)
+<Row Class="almostFullWidth">
+    <Column id="colControls" ColumnSize="ColumnSize.Is12.OnDesktop.Is12.OnTablet.Is12.OnMobile" TextAlignment="TextAlignment.End">
+        <Button Clicked="ResetChat" Class="BorderlessGrayButtonMiddle"><i class="fa fa-trash" /> Clear Chat</Button>
+        <Button Clicked="ShowSettings" Class="BorderlessGrayButtonRight"><i class="fa fa-cog" /> Developer Settings</Button>
+    </Column>
+</Row>
+<Row Class="chatbot-row almostFullWidth">
+    <Column id="colConversation" ColumnSize="@(showSettings ? ColumnSize.Is8.OnDesktop.Is8.OnTablet.Is12.OnMobile : ColumnSize.Is12.OnDesktop.Is12.OnTablet.Is12.OnMobile)">
+        <Div Class="chatbot-container">
+            <Div id="conversation" Class="conversation">
+                <Div Class="chatbot-message">
+                    @foreach (var item in AppData.ChatMessageHistory)
                     {
-                        <div class="@item.CSS">
-                            <div class="user">
-                                @item.Username
-                                <span title="@item.QueryInfoPlusTime"><Icon Name="IconName.InfoCircle" Class="WhiteIcon" /></span>
-                            </div>
-                            <div class="msg">@item.Body</div>
-                        </div>
+                        <MessageBubbleComponent message="@item" />
                     }
-                </div>
-            </div>
+                </Div>
+            </Div>
             <LoadingIndicator @ref="loadingIndicator">
-                <EditForm Model="@SimpleAppData.ChatCurrentMessage" OnSubmit="SubmitForm">
-                    <div class="message-container">
-                        <input id="inputText" type="text" @bind-value="SimpleAppData.ChatCurrentMessage.Request" @bind-value:event="oninput" style="width: 100%" class="input-lg" placeholder="enter your question" />
-                        <button class="btn btn-info" type="submit" style="margin: 0 5px 0 5px;">Send</button>
-                    </div>
+                <EditForm Model="@AppData.ChatCurrentMessage" OnSubmit="SubmitForm">
+                    <Div Class="message-container">
+                        <input id="inputText" type="text" @bind-value="AppData.ChatCurrentMessage.Request" @bind-value:event="oninput" class="input-lg fullWidth" placeholder="enter your question" />
+                        <button class="btn btn-info submitButton" type="submit" >Send</button>
+                    </Div>
                 </EditForm>
             </LoadingIndicator>
-        </div>
+        </Div>
     </Column>
-    <Column ColumnSize="ColumnSize.Is4.OnDesktop.Is4.OnTablet.Is12.OnMobile">
-        <div id="settings" class="chatbot-container">
-            <Heading Style="margin-top: 25px;">
+    <Column id="colSettings" ColumnSize="ColumnSize.Is4.OnDesktop.Is4.OnTablet.Is12.OnMobile" Display="@(showSettings ? Display.Block : Display.None)">
+        <Div id="settings" Class="chatbot-container">
+            <Heading>
                 Settings:
             </Heading>
-            <Paragraph Style="margin-top: 25px;">
-                <b>Temperature:</b> @SimpleAppData.ChatTemperature <span title="Controls randomness. Lowering the temperature means that the model will produce more repetitive and deterministic responses. Increasing the temperature will result in more unexpected or creative responses. Try adjusting temperature or Top P but not both."><Icon Name="IconName.InfoCircle" Class="LightGrayIcon" /></span>
-            </Paragraph>
-            <Field>
-                <Slider TValue="int" @bind-Value="@SimpleAppData.ChatTemperature" Min="10" Max="100" Step="5" />
-            </Field>
-            <Paragraph>
-                <b>Tokens:</b> @SimpleAppData.ChatTokenValue <span title="Set a limit on the number of tokens per model response. The API supports a maximum of 4000 tokens shared between the prompt (including system message, examples, message history, and user query) and the model's response. One token is roughly 4 characters for typical English text."><Icon Name="IconName.InfoCircle" Class="LightGrayIcon" /></span>
-            </Paragraph>
-            <Field>
-                <Slider TValue="int" @bind-Value="@SimpleAppData.ChatTokenValue" Min="25" Max="4000" Step="25" />
-            </Field>
-            <Paragraph Style="font-size: 0.7em; margin-left: 15px;">
-                Approximate Query Cost: $ @SimpleAppData.ChatTokenCost (based on ~$0.002 / 1K tokens)
-            </Paragraph>
-            <Paragraph>
-                <b>Model:</b> <Span Style="color: gray; font-size: 0.7em">(<a href="https://learn.microsoft.com/en-us/azure/cognitive-services/openai/concepts/models" target="_blank">learn more</a>)</Span>
-            </Paragraph>
-            <Field>
-                <Select TValue="string" @bind-SelectedValue="@SimpleAppData.ChatSelectedModel">
-                    <SelectItem Value="@Data.Constants.LanguageModelType.textDavinci003">@Data.Constants.LanguageModelType.textDavinci003</SelectItem>
-                    @*<SelectItem Value="@Constants.LanguageModelType.gpt35turbo">@Constants.LanguageModelType.gpt35turbo</SelectItem>*@
-                </Select>
-            </Field>
-            <Button Clicked="ResetChat" Class="btn btn-warning" Style="margin-top: 15px;">Reset Chat History</Button>
-            <div class="alert alert-info" style="margin-top: 15px;">
+            <Div id="editTemperature" Class="divClear smallTopMargin">
+                <Div Class="divFloatLeft">
+                    <b>Temperature:</b> @AppData.ChatTemperature <span title="Controls randomness. Lowering the temperature means that the model will produce more repetitive and deterministic responses. Increasing the temperature will result in more unexpected or creative responses. Try adjusting temperature or Top P but not both."><Icon Name="IconName.InfoCircle" Class="LightGrayIcon" /></span>
+                </Div>
+                <Div Class="divFloatLeft smallLeftMargin">
+                    <Slider TValue="int" @bind-Value="@AppData.ChatTemperature" Min="0" Max="100" Step="5" />
+                </Div>
+            </Div>
+            <Div id="editTokens" Class="divClear smallTopMargin">
+                <Div Class="divFloatLeft">
+                    <b>Tokens:</b> @AppData.ChatTokenValue <span title="Set a limit on the number of tokens per model response. The API supports a maximum of 4000 tokens shared between the prompt (including system message, examples, message history, and user query) and the model's response. One token is roughly 4 characters for typical English text."><Icon Name="IconName.InfoCircle" Class="LightGrayIcon" /></span>
+                </Div>
+                <Div Class="divFloatLeft smallLeftMargin">
+                    <Slider TValue="int" @bind-Value="@AppData.ChatTokenValue" Min="25" Max="4000" Step="25" />
+                </Div>
+                <Div Class="divClear mediumTopMargin mediumLeftMargin smallGrayText">
+                    Approximate Query Cost: $ @AppData.ChatTokenCost (based on ~$0.002 / 1K tokens)
+                </Div>
+            </Div>
+            <Div id="editModel" Class="divClear smallTopMargin">
+                <Div Class="divFloatLeft">
+                    <b>Model:</b> <Span Class="smallGrayText">(<a href="https://learn.microsoft.com/en-us/azure/cognitive-services/openai/concepts/models" target="_blank">learn more</a>)</Span>
+                </Div>
+                <Div Class="divFloatLeft">
+                    <Select TValue="string" @bind-SelectedValue="@AppData.ChatSelectedModel" Class="selectBoxTight">
+                        @* Chat completion API does not work with textDavinci003...  *@
+                        @*<SelectItem Value="@Data.Constants.LanguageModelType.textDavinci003">@Data.Constants.LanguageModelType.textDavinci003</SelectItem>*@
+                        <SelectItem Value="@Data.Constants.LanguageModelType.gpt35turbo">@Data.Constants.LanguageModelType.gpt35turbo</SelectItem>
+                    </Select>
+                </Div>
+            </Div>
+            <Div id="editVoice" Class="divClear smallTopMargin">
+                <Div Class="divFloatLeft">
+                    <b>Voice:</b> <span title="Choose the voice that you want the assistant to use when creating a reply."><Icon Name="IconName.InfoCircle" Class="LightGrayIcon" /></span>
+                </Div>
+                <Div Class="divFloatLeft">
+                    @*<PersonalityComponent @bind-SelectedPersonality="AppData.Personality" @bind-SelectedPersonality:event="SelectedPersonalityChanged" @ref="personalityComponent" />*@
+                    <Select TValue="string" @bind-SelectedValue="@AppData.Personality" Class="selectBoxTight">
+                        @foreach (var item in ChatPersonality.Personalities.OrderBy(x => x.SortOrderNbr).ThenBy(x => x.Name))
+                        {
+                            <SelectItem Value="@item.Name">@item.Description</SelectItem>
+                        }
+                    </Select>
+                </Div>
+            </Div>
+            <Div id="editAlert" Class="alert alert-info divClear smallTopMargin">
                 This page uses a simple API call to talk to OpenAI Service in Azure.
-            </div>
-        </div>
+            </Div>
+        </Div>
     </Column>
 </Row>
 <SnackbarStack @ref="snackbarstack" Location="SnackbarStackLocation.End" />

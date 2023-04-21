@@ -81,15 +81,15 @@ public class OKChatService : IOKChatService
                 languageModel = queryModel.Model;
                 SetupAPIClient();
             }
-
             var okResult = await api.Chat.CreateChatCompletionAsync(new ChatRequest()
             {
                 Model = Model.ChatGPTTurbo,
                 Temperature = (double)queryModel.Temperature,
                 MaxTokens = queryModel.Max_tokens,
-                Messages = new OpenAI_API.Chat.ChatMessage[] {
-                new OpenAI_API.Chat.ChatMessage(OpenAI_API.Chat.ChatMessageRole.User, queryModel.Prompt)
-            }
+                Messages = new OpenAI_API.Chat.ChatMessage[] 
+                {
+                    new OpenAI_API.Chat.ChatMessage(ChatMessageRole.User, queryModel.Prompt)
+                }
             });
             var response = new OpenAIResponse(okResult);
             return response;

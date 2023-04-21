@@ -45,6 +45,9 @@ public partial class Index : ComponentBase
             case "simpleimage":
                 NavManager.NavigateTo("/SimpleImage");
                 break;
+            case "imagegenerator":
+                NavManager.NavigateTo("/ImageGenerator");
+                break;
             default:
                 NavManager.NavigateTo($"/{pageName}");
                 break;

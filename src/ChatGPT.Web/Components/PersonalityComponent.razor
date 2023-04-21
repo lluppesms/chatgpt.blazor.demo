@@ -1,0 +1,19 @@
+﻿@*
+    Usage:
+        <PersonalityComponent @bind-SelectedPersonality="AppData.Personality" />
+        <PersonalityComponent @bind-SelectedPersonality="AppData.Personality" @bind-SelectedPersonality:event="SelectedPersonalityChanged" @ref="personalityComponent" />
+
+    Notes: This should work, but it fails to set value, or keeps resetting value to blank...
+*@
+
+<Select TValue="string" @bind-SelectedValue="@SelectedPersonality" @bind-SelectedValue:event="onselect" Style="margin: -5px 0 10px 10px;">
+    @foreach (var item in ChatPersonality.Personalities.OrderBy(x => x.SortOrderNbr).ThenBy(x => x.Name))
+    {
+        <SelectItem Value="@item.Name">@item.Description</SelectItem>
+    }
+</Select>
+
+@code {
+    [Parameter] public string SelectedPersonality { get; set; }
+    [Parameter] public EventCallback<string> SelectedPersonalityChanged { get; set; }
+}

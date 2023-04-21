@@ -6,6 +6,8 @@
 // Application Settings
 // </summary>
 //-----------------------------------------------------------------------
+using OpenAI_API.Images;
+
 namespace ChatGPT.Data;
 
 /// <summary>
@@ -56,6 +58,22 @@ public class CreateImageRequest
         ImageSize = imageSize;
         ImageCount = 1;
     }
+
+    /// <summary>
+    /// Return OK Image Size
+    /// </summary>
+    public ImageSize ReturnOKImageSize(string imageSizeString)
+    {
+        switch (imageSizeString)
+        {
+            case Constants.OpenAIImageSize.Size512:
+                return OpenAI_API.Images.ImageSize._512;
+            case Constants.OpenAIImageSize.Size256:
+                return OpenAI_API.Images.ImageSize._256;
+            default:
+                return OpenAI_API.Images.ImageSize._1024;
+        }
+    }
 }
 
 /// <summary>
@@ -64,14 +82,14 @@ public class CreateImageRequest
 public class CreateImageResponse
 {
     /// <summary>
-    /// Image was created?
-    /// </summary>
-    public int Created { get; set; }
-
-    /// <summary>
     /// List of images
     /// </summary>
     public List<OpenAIImage> Data { get; set; }
+
+    /// <summary>
+    /// Date Image was created
+    /// </summary>
+    public DateTime CreateDateTime { get; set; }
 
     /// <summary>
     /// Message
@@ -91,6 +109,18 @@ public class CreateImageResponse
     public CreateImageResponse(string messageTxt)
     {
         Message = messageTxt;
+    }
+
+    /// <summary>
+    /// Constructor
+    /// </summary>
+    public CreateImageResponse(DateTime? created, string url)
+    {
+        CreateDateTime = (DateTime)created;
+        Data = new List<OpenAIImage>
+        {
+            new OpenAIImage() { Url = url }
+        };
     }
 }
 

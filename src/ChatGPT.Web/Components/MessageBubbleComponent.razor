@@ -1,0 +1,12 @@
+﻿<div class="@message.CSS">
+    <div class="user">
+        @message.Username
+        <span title="@message.QueryInfoPlusTime"><Icon Name="IconName.InfoCircle" Class="WhiteIcon" /></span>
+    </div>
+    <div class="msg">@message.Body</div>
+</div>
+
+@code {
+    [Parameter]
+    public MessageBubble message { get; set; }
+}

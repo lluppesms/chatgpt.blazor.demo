@@ -3,16 +3,13 @@
 // Copyright 2023, Luppes Consulting, Inc. All rights reserved.
 // </copyright>
 // <summary>
-// Simple Chat Page Code-Behind
+// Simple Chat Page Code Behind
 // </summary>
 //-----------------------------------------------------------------------
-using System.Dynamic;
-using System;
-
 namespace ChatGPT.Web.Pages;
 
 /// <summary>
-/// Simple Chat Page Code-Behind
+/// Simple Chat Page Code Behind
 /// </summary>
 public partial class SimpleChat : ComponentBase
 {
@@ -21,10 +18,12 @@ public partial class SimpleChat : ComponentBase
     [Inject] ILocalStorageService LocalStorageSvc { get; set; }
     [Inject] SweetAlertService SweetAlert { get; set; }
 
+    private bool showSettings = false;
     private const string DefaultModel = Data.Constants.LanguageModelType.textDavinci003;
     private const string DefaultMessage = "This is a simple Chat-GPT example calling the API directly";
     private SessionStorageService SessionStorage = null;
-    private SessionState SimpleAppData = new(DefaultModel);
+    private const string StorageObjectName = Data.Constants.LocalStorage.SimpleChatSessionObject;
+    private SessionState AppData = new(DefaultModel);
     private LoadingIndicator loadingIndicator;
     private SnackbarStack snackbarstack;
 
@@ -49,21 +48,21 @@ public partial class SimpleChat : ComponentBase
         try
         {
             // get rid of extra return characters, which seem to break the model...?
-            SimpleAppData.ChatCurrentMessage.LastRequest = SimpleAppData.ChatCurrentMessage.Request.Replace("\n", " "); ;
+            AppData.ChatCurrentMessage.LastRequest = AppData.ChatCurrentMessage.Request.Replace("\n", " "); ;
             // reset form for next time
-            SimpleAppData.ChatCurrentMessage.Request = string.Empty;
+            AppData.ChatCurrentMessage.Request = string.Empty;
             // post the current message on the screen
-            DisplayNewMessage(SimpleAppData.ChatCurrentMessage.LastRequest, true);
+            DisplayNewMessage(AppData.ChatCurrentMessage.LastRequest, true);
             // go get the API response
             var timer = Stopwatch.StartNew();
-            SimpleAppData.ChatCurrentMessage.Response = await chatService.GetResponse(
-              new OpenAIQuery(SimpleAppData.ChatSelectedModel, SimpleAppData.ChatTemperatureDec, SimpleAppData.ChatTokenValue, SimpleAppData.ChatCurrentMessage.LastRequest)
+            AppData.ChatCurrentMessage.Response = await chatService.GetResponse(
+              new OpenAIQuery(AppData.ChatSelectedModel, AppData.ChatTemperatureDec, AppData.ChatTokenValue, AppData.MessagePlusPersonality)
             );
             var elaspsedMS = timer.ElapsedMilliseconds;
             // post the repsonse to the screen
-            DisplayNewMessage(SimpleAppData.ChatCurrentMessage.Response.Choices[0].Text, SimpleAppData.ChatCurrentMessage.Response.QueryInfo, SimpleAppData.ChatCurrentMessage.LastRequest, SimpleAppData.ChatTemperatureDec, SimpleAppData.ChatTokenValue, elaspsedMS);
+            DisplayNewMessage(AppData.ChatCurrentMessage.Response.Choices[0].Text, AppData.ChatCurrentMessage.Response.QueryInfo, AppData.ChatCurrentMessage.LastRequest, AppData.ChatTemperatureDec, AppData.ChatTokenValue, elaspsedMS);
             await SaveSession();
-            var tokenText = SimpleAppData.ChatCurrentMessage.Response.QueryInfo[SimpleAppData.ChatCurrentMessage.Response.QueryInfo.IndexOf("Prompt")..];
+            var tokenText = AppData.ChatCurrentMessage.Response.QueryInfo[AppData.ChatCurrentMessage.Response.QueryInfo.IndexOf("Prompt")..];
             await snackbarstack.PushAsync($"Elapsed: {(decimal)elaspsedMS / 1000m:0.0} seconds; {tokenText}", SnackbarColor.Info);
         }
         catch (Exception ex)
@@ -76,7 +75,7 @@ public partial class SimpleChat : ComponentBase
     private void DisplayNewMessage(string messageText, bool isMine)
     {
         var userName = isMine ? "Me" : "GPT";
-        DisplayNewMessage(new MessageBubble(userName, SimpleAppData.ChatCurrentMessage.LastRequest, isMine));
+        DisplayNewMessage(new MessageBubble(userName, AppData.ChatCurrentMessage.LastRequest, isMine));
     }
     private void DisplayNewMessage(string messageText, string queryInfo, string prompt, decimal temperature, int tokens, long elapsed)
     {
@@ -84,7 +83,7 @@ public partial class SimpleChat : ComponentBase
     }
     private async void DisplayNewMessage(MessageBubble message)
     {
-        SimpleAppData.ChatMessageHistory.Add(message);
+        AppData.ChatMessageHistory.Add(message);
         ScrollDownAndRefocus();
         await SaveSession();
     }
@@ -112,29 +111,34 @@ public partial class SimpleChat : ComponentBase
     {
         if (await Utilities.QueryUserPrompt(SweetAlert, "Clear Entries?", "This will remove your chat history", "Yes", "No", false))
         {
-            SimpleAppData.ChatMessageHistory = new();
-            SimpleAppData.ChatCurrentMessage = new();
+            AppData.ChatMessageHistory = new();
+            AppData.ChatCurrentMessage = new();
             DisplayNewMessage(new MessageBubble("GPT", DefaultMessage));
             await SaveSession();
         }
     }
+    private void ShowSettings()
+    {
+        showSettings = !showSettings;
+        StateHasChanged();
+    }
     private async Task<bool> GetSession()
     {
-        SimpleAppData = new SessionState(DefaultModel);
+        AppData = new SessionState(DefaultModel);
         SessionStorage ??= new SessionStorageService(LocalStorageSvc);
-        var previousState = await SessionStorage.GetState(Data.Constants.LocalStorage.SimpleChatSessionObject);
+        var previousState = await SessionStorage.GetState(StorageObjectName);
         if (previousState != null && previousState.ChatMessageHistory.Count > 1)
         {
             if (await Utilities.QueryUserPrompt(SweetAlert, "Load previous session?", "A previous session was found in your local storage", "Yes", "No", false))
             {
-                SimpleAppData = previousState;
+                AppData = previousState;
             }
             else
             {
                 await SaveSession();
             }
         }
-        if (SimpleAppData.ChatMessageHistory.Count == 0)
+        if (AppData.ChatMessageHistory.Count == 0)
         {
             DisplayNewMessage(new MessageBubble("GPT", DefaultMessage));
         }
@@ -143,7 +147,7 @@ public partial class SimpleChat : ComponentBase
     private async Task<bool> SaveSession()
     {
         SessionStorage ??= new SessionStorageService(LocalStorageSvc);
-        await SessionStorage.StoreState(Data.Constants.LocalStorage.SimpleChatSessionObject, SimpleAppData);
+        await SessionStorage.StoreState(StorageObjectName, AppData);
         return true;
     }
 }

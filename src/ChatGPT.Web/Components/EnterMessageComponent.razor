@@ -1,0 +1,24 @@
+﻿@*
+    Usage: 
+    <EnterMessageComponent @bind-CurrentMessage="@AppData.ChatCurrentMessage" @bind-SubmitForm="SubmitForm" />
+
+    Notes: 
+    This ***should*** work, but it doesn't...  I'm getting an error that says:
+      Cannot assign to 'SubmitForm' because it is a 'method group'
+    I'm not sure why this is happening
+*@
+
+
+<EditForm Model="@CurrentMessage" OnSubmit="SubmitForm">
+    <div class="message-container">
+        <input id="inputText" type="text" @bind-value="CurrentMessage.Request" @bind-value:event="oninput"
+               style="width: 100%" class="input-lg" placeholder="enter your question" />
+        <button class="btn btn-info" type="submit" style="margin: 0 5px 0 5px;">Send</button>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter] public ChatMessage CurrentMessage { get; set; }
+    [Parameter] public EventCallback<EditContext> SubmitForm { get; set; }
+    [Parameter] public EventCallback<ChatMessage> CurrentMessageChanged { get; set; }
+}

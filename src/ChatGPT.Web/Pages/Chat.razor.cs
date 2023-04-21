@@ -18,9 +18,11 @@ public partial class Chat : ComponentBase
     [Inject] ILocalStorageService LocalStorageSvc { get; set; }
     [Inject] SweetAlertService SweetAlert { get; set; }
 
+    private bool showSettings = false;
     private const string DefaultModel = Data.Constants.LanguageModelType.gpt35turbo;
     private const string DefaultMessage = "This is a Chat-GPT example using OKGoDoIt API";
     private SessionStorageService SessionStorage = null;
+    private const string StorageObjectName = Data.Constants.LocalStorage.ChatSessionObject;
     private SessionState AppData = new(DefaultModel);
     private LoadingIndicator loadingIndicator;
     private SnackbarStack snackbarstack;
@@ -54,7 +56,7 @@ public partial class Chat : ComponentBase
             // go get the API response
             var timer = Stopwatch.StartNew();
             AppData.ChatCurrentMessage.Response = await chatService.GetResponse(
-              new OpenAIQuery(AppData.ChatSelectedModel, AppData.ChatTemperatureDec, AppData.ChatTokenValue, AppData.ChatCurrentMessage.LastRequest)
+              new OpenAIQuery(AppData.ChatSelectedModel, AppData.ChatTemperatureDec, AppData.ChatTokenValue, AppData.MessagePlusPersonality)
             );
             var elaspsedMS = timer.ElapsedMilliseconds;
             // post the repsonse to the screen
@@ -115,11 +117,16 @@ public partial class Chat : ComponentBase
             await SaveSession();
         }
     }
+    private void ShowSettings()
+    {
+        showSettings = !showSettings;
+        StateHasChanged();
+    }
     private async Task<bool> GetSession()
     {
         AppData = new SessionState(DefaultModel);
         SessionStorage ??= new SessionStorageService(LocalStorageSvc);
-        var previousState = await SessionStorage.GetState(Data.Constants.LocalStorage.ChatSessionObject);
+        var previousState = await SessionStorage.GetState(StorageObjectName);
         if (previousState != null && previousState.ChatMessageHistory.Count > 1)
         {
             if (await Utilities.QueryUserPrompt(SweetAlert, "Load previous session?", "A previous session was found in your local storage", "Yes", "No", false))
@@ -140,7 +147,7 @@ public partial class Chat : ComponentBase
     private async Task<bool> SaveSession()
     {
         SessionStorage ??= new SessionStorageService(LocalStorageSvc);
-        await SessionStorage.StoreState(Data.Constants.LocalStorage.ChatSessionObject, AppData);
+        await SessionStorage.StoreState(StorageObjectName, AppData);
         return true;
     }
 }

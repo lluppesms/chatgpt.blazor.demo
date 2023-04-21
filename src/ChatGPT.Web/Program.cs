@@ -27,6 +27,7 @@ builder.Services.AddSingleton<AppSettings>(settings);
 builder.Services.AddSingleton<ISimpleImageService>(new SimpleImageService(settings));
 builder.Services.AddSingleton<ISimpleChatService>(new SimpleChatService(settings));
 builder.Services.AddSingleton<IOKChatService>(new OKChatService(settings));
+builder.Services.AddSingleton<IOKImageService>(new OKImageService(settings));
 
 // ----- Configure Authentication ---------------------------------------------------------------------
 var authSettings = builder.Configuration.GetSection("AzureAD");
